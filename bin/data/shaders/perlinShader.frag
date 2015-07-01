@@ -21,180 +21,150 @@ uniform bool bwSwitch;
 
 
 
-// Voronoi noises
-// by Pietro De Nicola
+// --- Fractal noise simulating heterogeneous density in galactic clouds
+// ---   -> help from Fabrice Neyret, https://www.shadertoy.com/user/FabriceNeyret2
+// ---   -> noise functions from Inigo Quilez, https://www.shadertoy.com/view/XslGRr
+
+
+// Number of computed scales
+#define NbScales 22.
+
+// Id of the lowest displayed scale (debug)
+#define FirstScale 0.
+
+// Anti aliasing
+#define LimitDetails 2.5
+#define SmoothZone 100.
+
+// Manual Zoom / Auto Zoom
+#define Anim 0
+
+// Colormap
+#define ClampLevel 1.
+
+#define ZoomDistance 10.
+
+// Size of the first Perlin Noise grid (debug)
+#define FirstDivision 8.
+
+
+// 0 : multiplicative
+// 1 : additive
+#define Mode 0
+
+#define GazConcentration 0.
+
+// Caracteristic ratio of the frequencies (0.5 for octaves)
+#define fRatio .5
+
+float t = iGlobalTime;
+
+float in1 = 1;
+float in2 = 2;
+
+
+// --- noise functions from https://www.shadertoy.com/view/XslGRr
+// Created by inigo quilez - iq/2013
 // License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
 
-
-#define SCALE		   10.0		// 3.0
-#define BIAS   		   +0.0
-#define POWER			1.0		
-#define OCTAVES   		4		// 7
-#define SWITCH_TIME 	5.0		// seconds
-#define WARP_INTENSITY	0.00	// 0.06
-#define WARP_FREQUENCY	16.0
-
-float t = iGlobalTime/SWITCH_TIME;
-
-//
-// the following parameters identify the voronoi you're watching
-// and will change automatically
-//
-//float function 			= mod(t,4.0);
-//bool  multiply_by_F1	= mod(t,8.0)  >= 4.0;
-//bool  inverse			= mod(t,16.0) >= 8.0;
-//float distance_type		= mod(t/16.0,4.0);
-
-
-
-
-//------------------------------------------------------------
-// printing helper
-// https://www.shadertoy.com/view/4sBSWW
-
-float DigitBin(const in int x)
-{
-    return x==0?480599.0:x==1?139810.0:x==2?476951.0:x==3?476999.0:x==4?350020.0:x==5?464711.0:x==6?464727.0:x==7?476228.0:x==8?481111.0:x==9?481095.0:0.0;
+vec2 hash( vec2 p ) {  						// rand in [-1,1]
+    p = vec2( dot(p,vec2(127.1,311.7)),
+             dot(p,vec2(269.5,183.3)) );
+    return -1. + 2.*fract(sin(p+20.)*53758.5453123);
+}
+float noise( in vec2 p ) {
+    vec2 i = floor(p), f = fract(p);
+    vec2 u = f*f*(3.-2.*f);
+    return mix( mix( dot( hash( i + vec2(0.,0.) ), f - vec2(0.,0.) ),
+                    dot( hash( i + vec2(1.,0.) ), f - vec2(1.,0.) ), u.x),
+               mix( dot( hash( i + vec2(0.,1.) ), f - vec2(0.,1.) ),
+                   dot( hash( i + vec2(1.,1.) ), f - vec2(1.,1.) ), u.x), u.y);
 }
 
-float PrintValue(const in vec2 fragCoord, const in vec2 vPixelCoords, const in vec2 vFontSize, const in float fValue, const in float fMaxDigits, const in float fDecimalPlaces)
-{
-    vec2 vStringCharCoords = (fragCoord.xy - vPixelCoords) / vFontSize;
-    if ((vStringCharCoords.y < 0.0) || (vStringCharCoords.y >= 1.0)) return 0.0;
-	float fLog10Value = log2(abs(fValue)) / log2(10.0);
-	float fBiggestIndex = max(floor(fLog10Value), 0.0);
-	float fDigitIndex = fMaxDigits - floor(vStringCharCoords.x);
-	float fCharBin = 0.0;
-	if(fDigitIndex > (-fDecimalPlaces - 1.01)) {
-		if(fDigitIndex > fBiggestIndex) {
-			if((fValue < 0.0) && (fDigitIndex < (fBiggestIndex+1.5))) fCharBin = 1792.0;
-		} else {		
-			if(fDigitIndex == -1.0) {
-				if(fDecimalPlaces > 0.0) fCharBin = 2.0;
-			} else {
-				if(fDigitIndex < 0.0) fDigitIndex += 1.0;
-				float fDigitValue = (abs(fValue / (pow(10.0, fDigitIndex))));
-                float kFix = 0.0001;
-                fCharBin = DigitBin(int(floor(mod(kFix+fDigitValue, 10.0))));
-			}		
-		}
-	}
-    return floor(mod((fCharBin / pow(2.0, floor(fract(vStringCharCoords.x) * 4.0) + (floor(vStringCharCoords.y * 5.0) * 4.0))), 2.0));
-}
-//------------------------------------------------------------
 
+// -----------------------------------------------
 
-
-
-//
-// Noise functions
-//
-
-vec2 hash( vec2 p )
-{
-    p = vec2( dot(p,vec2(127.1,311.7)), dot(p,vec2(269.5,183.3)) );
-	return fract(sin(p)*43758.5453);
-}
-
-float noise( in vec2 p )
-{
-    vec2 i = floor( p );
-    vec2 f = fract( p );
-	
-	vec2 u = f*f*(3.0-2.0*f);
-
-    return mix( mix( dot( hash( i + vec2(0.0,0.0) ), f - vec2(0.0,0.0) ), 
-                     dot( hash( i + vec2(1.0,0.0) ), f - vec2(1.0,0.0) ), u.x),
-                mix( dot( hash( i + vec2(0.0,1.0) ), f - vec2(0.0,1.0) ), 
-                     dot( hash( i + vec2(1.0,1.0) ), f - vec2(1.0,1.0) ), u.x), u.y);
-}
-
-float voronoi( in vec2 x )
-{
-    vec2 n = floor( x );
-    vec2 f = fract( x );
-
-	float F1 = 8.0;
-	float F2 = 8.0;
-	
-	
-    for( int j=-1; j<=1; j++ )
-    for( int i=-1; i<=1; i++ )
-    {
-        vec2 g = vec2(i,j);
-        vec2 o = hash( n + g );
-
-        o = 0.5 + 0.41*sin( iGlobalTime + 6.2831*o ); // animate
-
-		vec2 r = g - f + o;
-
-		float d = 	distance_type < 1.0 ? dot(r,r)  :				// euclidean^2
-				  	distance_type < 2.0 ? sqrt(dot(r,r)) :			// euclidean
-					distance_type < 3.0 ? abs(r.x) + abs(r.y) :		// manhattan
-					distance_type < 4.0 ? max(abs(r.x), abs(r.y)) :	// chebyshev
-					0.0;
-
-		if( d<F1 ) 
-		{ 
-			F2 = F1; 
-			F1 = d; 
-		}
-		else if( d<F2 ) 
-		{
-			F2 = d;
-		}
+vec3 colormap(float value) {
+    float maxv = ClampLevel;
+    vec3 c1,c2;
+    float t;
+    if (value < maxv / 3.) {
+        c1 = vec3(1.);   	   c2 = vec3(1., 1., .5);
+        t =  1./3.;
+    } else if (value < maxv * 2. / 3.) {
+        c1 = vec3(1., 1., .5); c2 = vec3(1., 0,  0.);
+        t =  2./3. ;
+    } else {
+        c1 = vec3(1., 0., 0.); c2 = vec3(0.);
+        t =  1.;
     }
-	
-	float c = function < 1.0 ? F1 : 
-			  function < 2.0 ? F2 : 
-			  function < 3.0 ? F2-F1 :
-			  function < 4.0 ? (F1+F2)/2.0 : 
-			  0.0;
-		
-	if( multiply_by_F1 )	c *= F1;
-    if( multiply_by_F2 )	c *= F2;
-	if( inverse )			c = 1.0 - c;
-	
-    return c;
+    t = (t*maxv-value)/(maxv/3.);
+    return t*c1 + (1.-t)*c2;
 }
 
-float fbm( in vec2 p )
-{
-	float s = 0.0;
-	float m = 0.0;
-	float a = 0.5;
-	
-	for( int i=0; i<OCTAVES; i++ )
-	{
-		s += a * voronoi(p);
-		m += a;
-		a *= 0.5;
-		p *= 2.0;
-	}
-	return s/m;
-}
-
-//
-// Main
-//
-
-void main( )//out vec4 fragColor, in vec2 fragCoord )
-{
-
-    vec2 p = gl_FragCoord.xy/iResolution.xx;
-	float w = noise( p * WARP_FREQUENCY );
-	p += WARP_INTENSITY * vec2(w,-w);
-    float c = POWER*fbm( SCALE*p ) + BIAS;
-    float a = c;
-    if (bwSwitch) c = 1.0-c;
-    vec3 color = c * vec3( 0.4, 1.0, 0.9 );
+void main() { // --------------------------------------
+    vec2 uv = gl_FragCoord.xy/ iResolution.y;
     
-    // print t
-   // vec2 fontsize = vec2(8.0, 15.0);
-   // vec2 position = vec2(0.0, 0.0);
-   // float prn = PrintValue(gl_FragCoord.xy, position + vec2(0.0, 6.0), fontsize, t, 1.0, 0.0);
-   // color = mix( color, vec3(0.7, 0.0, 0.0), prn);
-	
-    //fragColor = vec4( color, 1.0 );
-    gl_FragColor = vec4( color, a );
-}
+    float d = 1.; // initial density
+    
+#if Anim
+    float cycle = cos(mod(-t,100.)/100.*2.*3.14);
+    float n_tiles_level_1 = exp(cycle*cycle*ZoomDistance)*pow(2.,FirstDivision);
+#else
+    float n_tiles_level_1 = exp(in1/iResolution.x*ZoomDistance)*pow(2.,FirstDivision);
+#endif
+    
+    // zoom and centering
+    uv = (uv - vec2(.9,.5))*n_tiles_level_1 + vec2(.9,.5);
+    
+    float theta = 4.+.008*t; // some rotations, not necessary
+    mat2 m = fRatio*mat2( cos(theta),sin(theta),
+                         -sin(theta),cos(theta) );
+    
+    // computation of the multiplicative noise
+    float q = 1.;
+    for (float i = 0.; i < NbScales; i++) {
+        if (d<1e-2) continue;
+        
+        // multiply the amplitude to maintain the total density
+        float c = (i+1.< NbScales) ? 2. : 1.;
+        
+        float nn = noise(uv + 10.7*i*i);
+        
+        for (float j = 0.; j < GazConcentration; j++) {
+            nn = sin(nn*3.14159265359/2.);
+        }
+        
+#if Mode == 0
+        float n = c* 0.5*(1.+nn);
+#else
+        float n = nn;
+#endif
+        
+        // compute only the visible scales
+        float crit = n_tiles_level_1 *q - iResolution.x/LimitDetails;
+        if (crit < SmoothZone && i >= FirstScale) {
+            if (crit>0.) {  // avoid aliasing
+                float t = crit/SmoothZone;
+                n = n*(1.-t);
+#if Mode == 0
+                n += t;
+#endif
+            }
+            
+#if Mode == 0
+            d *= n;
+#else
+            d += n*(0.5);
+#endif
+            
+            
+        }
+        
+        uv = m*uv; q*= fRatio; // go to the next octave
+    }
+    d = clamp(d,0.0,d);
+    
+    //colormap(exp(-d))
+    gl_FragColor = vec4(vec3(exp(-d), 1.0);
+                        }

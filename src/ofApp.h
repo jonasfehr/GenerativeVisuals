@@ -117,6 +117,7 @@ public:
     ofParameterGroup paramSimplex;
     ofParameter<float> in1;
     ofParameter<float> tempo;
+    float counterSimplex;
     ofParameter<float> zoom;
 
     
