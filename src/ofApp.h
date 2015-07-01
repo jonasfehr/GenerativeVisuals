@@ -97,11 +97,13 @@ public:
     
     ofParameterGroup paramArcs;
     ofParameter<float> numOfArcs;
+    ofParameter<float> possibility;
     float numOfArcsLast;
     ofParameter<bool> width_height;
     
     
     ofParameterGroup paramVoronoise;
+    ofParameter<float> tempoVoronoise;
     ofParameter<float> function;
     ofParameter<bool>  multiply_by_F1;
     ofParameter<bool>  multiply_by_F2;
@@ -109,16 +111,20 @@ public:
     ofParameter<bool>  inverse;
     ofParameter<float> distance_type;
     
-
-    
-    ofParameter<float>  posibility;
+    ofParameterGroup paramPerlin;
+    ofParameter<float> tempoPerlin;
     
     
     ofParameterGroup paramSimplex;
+    ofParameter<float> tempoSimplex;
     ofParameter<float> in1;
-    ofParameter<float> tempo;
-    float counterSimplex;
     ofParameter<float> zoom;
+    
+    // tempo for noises
+    float counterVoronoise;
+    float counterPerlin;
+    float counterSimplex;
+
 
     
     // initialise Circle

@@ -2,7 +2,7 @@
 
 // ---> Shadertoy uniforms
 uniform vec3 iResolution;
-uniform float iGlobalTime;
+uniform float time;
 uniform float in1;
 uniform float zoom;
 uniform float tempo;
@@ -16,7 +16,6 @@ uniform bool bgTransparent;
 //adjusted by getting "completely random" gradients instead of randoming from 12 preset ones
 //and normalizing the gradient vector
 
-float time = iGlobalTime*tempo;
 
 float noise3D(vec3 p)
 {

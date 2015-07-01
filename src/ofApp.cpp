@@ -84,17 +84,25 @@ void ofApp::setup(){
     
     // param for voronoiseShader
     paramVoronoise.setName("paramVoronoise");
+    paramVoronoise.add(tempoVoronoise.set("tempoVoronoise", 0.5, 0., 1));
     paramVoronoise.add(function.set("function", 1, 0., 10));
     paramVoronoise.add(multiply_by_F1.set("multiply_by_F1", false));
     paramVoronoise.add(multiply_by_F2.set("multiply_by_F2", false));
     paramVoronoise.add(inverse.set("inverse", false));
     paramVoronoise.add(distance_type.set("distance_type", 1, 0., 10));
     
+    
+    // param for voronoiseShader
+    paramPerlin.setName("paramPerlin");
+    paramPerlin.add(tempoPerlin.set("tempoPerlin", 0.1, 0., 1));
+
+    
     // param for simplexShader
     paramSimplex.setName("paramSimplex");
+    paramSimplex.add(tempoSimplex.set("tempoSimplex", 0.1, 0., 1));
     paramSimplex.add(in1.set("in1", 1, 0., 1000));
     paramSimplex.add(zoom.set("zoom", 0.1, 0., 1));
-    paramSimplex.add(tempo.set("tempo", 0.5, 0., 1));
+
 
     // setGui
     parameters.setName("parameters");
@@ -102,6 +110,7 @@ void ofApp::setup(){
     parameters.add(paramLines);
     parameters.add(paramArcs);
     parameters.add(paramVoronoise);
+    parameters.add(paramPerlin);
     parameters.add(paramSimplex);
     
     gui.setup(parameters);
@@ -144,7 +153,7 @@ void ofApp::setup(){
     
     
     for(int i = 0; i < renderArcs.getHeight(); i++){
-        if(ofRandom(100)>posibility*100){
+        if(ofRandom(100)>possibility*100){
             if(rndPoints[i]){
                 rndPoints[i] = false;
             }else{
@@ -153,6 +162,10 @@ void ofApp::setup(){
         }
     }
     
+    
+    counterVoronoise = 0;
+    counterPerlin = 0;
+    counterVoronoise = 0;
     
     
 }
@@ -274,6 +287,10 @@ void ofApp::update(){
     }
     
     
+    counterVoronoise += tempoVoronoise;
+    counterPerlin   += tempoPerlin;
+    counterSimplex += tempoSimplex/5;
+    
     
     
 }
@@ -348,7 +365,7 @@ void ofApp::draw(){
             voronoiseShader.begin();
             
                 voronoiseShader.setUniform3f("iResolution", RENDERWIDTH, RENDERHEIGHT, 0.0);
-                voronoiseShader.setUniform1f("iGlobalTime", ofGetElapsedTimef());
+                voronoiseShader.setUniform1f("iGlobalTime", counterVoronoise);
                 voronoiseShader.setUniform1f("function", function);
                 voronoiseShader.setUniform1i("multiply_by_F1", multiply_by_F1);
                 voronoiseShader.setUniform1i("multiply_by_F2", multiply_by_F2);
@@ -384,12 +401,8 @@ void ofApp::draw(){
             perlinShader.begin();
             
                 perlinShader.setUniform3f("iResolution", RENDERWIDTH, RENDERHEIGHT, 0.0);
-                perlinShader.setUniform1f("iGlobalTime", ofGetElapsedTimef());
-                perlinShader.setUniform1f("function", function);
-                perlinShader.setUniform1i("multiply_by_F1", multiply_by_F1);
-                perlinShader.setUniform1i("multiply_by_F2", multiply_by_F2);
-                perlinShader.setUniform1i("inverse", inverse);
-                perlinShader.setUniform1f("distance_type", distance_type);
+                perlinShader.setUniform1f("iGlobalTime", counterPerlin);
+        
                 perlinShader.setUniform1i("bwSwitch", bwSwitch);
                 perlinShader.setUniform1i("bgTransparent", bgTransparent);
                 
@@ -420,10 +433,9 @@ void ofApp::draw(){
             simplexShader.begin();
             
                 simplexShader.setUniform3f("iResolution", RENDERWIDTH, RENDERHEIGHT, 0.0);
-                simplexShader.setUniform1f("iGlobalTime", ofGetElapsedTimef());
+                simplexShader.setUniform1f("time", counterSimplex);
                 simplexShader.setUniform1f("in1", in1);
                 simplexShader.setUniform1f("zoom", zoom);
-                simplexShader.setUniform1f("tempo", tempo);
                 simplexShader.setUniform1i("bwSwitch", bwSwitch);
                 simplexShader.setUniform1i("bgTransparent", bgTransparent);
     
