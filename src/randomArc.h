@@ -20,6 +20,8 @@ public:
     void change();
     void updateIndependent();
     void updateSize(float _radius, float _width);
+    void updatePos(ofVec2f _center);
+
     void updateRND();
     void draw();
     

@@ -77,6 +77,10 @@ void randomArc::updateSize(float _radius, float _width){
     radius = _radius;
     width = _width;
 }
+void randomArc::updatePos(ofVec2f _center){
+    center = _center;
+}
+
 void randomArc::updateRND(){
      if(ofRandom(0, 1) < 0.1){
      if ( prop == 1 ) prop = -1;

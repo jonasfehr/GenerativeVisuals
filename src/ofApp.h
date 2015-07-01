@@ -97,6 +97,7 @@ public:
     
     ofParameterGroup paramArcs;
     ofParameter<float> numOfArcs;
+    ofParameter<float> heightAdjust;
     ofParameter<float> possibility;
     float numOfArcsLast;
     ofParameter<bool> width_height;

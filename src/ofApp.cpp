@@ -24,7 +24,6 @@ void ofApp::setup(){
     
     
     // Syphon
-    
     syphonOutLines.setName("Lines");
     syphonOutArcs.setName("Arcs");
     syphonOutVoronoise.setName("Voronoise");
@@ -46,8 +45,6 @@ void ofApp::setup(){
     syphonSimplex = renderSimplex.getTextureReference();
     
     
-    
-    
     //VoronoiseRender
     voronoiseShader.load("shaders/voronoiseShader");
     perlinShader.load("shaders/perlinShader");
@@ -56,12 +53,12 @@ void ofApp::setup(){
     // setup Gui
     
     paramGeneral.setName("Enable");
-    paramGeneral.add(linesHorizontal.set("linesHorizontal", false));
-    paramGeneral.add(linesVertical.set("linesVertical", false));
-    paramGeneral.add(arcFlag.set("arcFlag", false));
-    paramGeneral.add(voronoise.set("voronoise", false));
-    paramGeneral.add(perlin.set("perlin", false));
-    paramGeneral.add(simplex.set("simplex", false));
+    paramGeneral.add(linesHorizontal.set("linesHorizontal", true));
+    paramGeneral.add(linesVertical.set("linesVertical", true));
+    paramGeneral.add(arcFlag.set("arcFlag", true));
+    paramGeneral.add(voronoise.set("voronoise", true));
+    paramGeneral.add(perlin.set("perlin", true));
+    paramGeneral.add(simplex.set("simplex", true));
     
     paramGeneral.add(BPM.set("BPM", 120, 10, 180));
     paramGeneral.add(BPW.set("BPW", 4, 1, 16));
@@ -78,6 +75,7 @@ void ofApp::setup(){
     // param Arcs
     paramArcs.setName("paramArcs");
     paramArcs.add(numOfArcs.set("numOfArcs", 10, 1, 140));
+    paramArcs.add(heightAdjust.set("heightAdjust", 0.5, 0., 1.));
     paramArcs.add(width_height.set("width_height", false));
     
     
@@ -135,8 +133,8 @@ void ofApp::setup(){
         numOfLinesVerticalLast++;
     }
     
-    center = ofVec2f(renderArcs.getWidth()/2, renderArcs.getHeight()/2);
-    radius = renderArcs.getHeight()/2;
+    center = ofVec2f(renderArcs.getWidth()/2, renderArcs.getHeight()*heightAdjust);
+    radius = renderArcs.getHeight();
     numOfArcsLast = 0;
     for(int i = 0; i<numOfArcs; i++){
         addNewArc();
@@ -144,6 +142,7 @@ void ofApp::setup(){
     }
     for(int i = 0; i<rndArc.size(); i++){
         rndArc[i].updateSize(radius*(i+1)/numOfArcs, radius/numOfArcs);
+        rndArc[i].updatePos(center);
     }
     
     bgColor = ofColor::white;
@@ -217,7 +216,12 @@ void ofApp::update(){
     
     // ARCS
     radius = renderArcs.getHeight()/2;
+    center = ofVec2f(renderArcs.getWidth()/2, renderArcs.getHeight()*heightAdjust);
     if(width_height)radius = renderArcs.getWidth()/2;
+    for(int i = 0; i<rndArc.size(); i++){
+        rndArc[i].updateSize(radius*(i+1)/numOfArcs, radius/numOfArcs);
+        rndArc[i].updatePos(center);
+    }
     
     
     // ARCs
@@ -227,19 +231,17 @@ void ofApp::update(){
             
         }
         numOfArcsLast = rndArc.size();
-        for(int i = 0; i<rndArc.size(); i++){
-            rndArc[i].updateSize(radius*(i+1)/numOfArcs, radius/numOfArcs);
-        }
     }
     else if(numOfArcs < numOfArcsLast){
         for (int n = 0; n<numOfArcsLast-numOfArcs; n++){
             deleteArc();
             numOfArcsLast--;
         }
-        for(int i = 0; i<rndArc.size(); i++){
-            rndArc[i].updateSize(radius*(i+1)/numOfArcs, radius/numOfArcs);
-        }
+
     }
+
+    
+    // Updates per BPM
     
     timer += (BPM/BPW/60/ofGetFrameRate());
     if(timer>=1){
@@ -286,6 +288,7 @@ void ofApp::update(){
         
     }
     
+    // Counter for noises
     
     counterVoronoise += tempoVoronoise;
     counterPerlin   += tempoPerlin;
@@ -512,6 +515,7 @@ void ofApp::draw(){
     
     
     // Output Syphon
+    ofFill(); // 10.9 fix
     syphonOutLines.publishTexture(&syphonLines);
     syphonOutArcs.publishTexture(&syphonArcs);
     syphonOutVoronoise.publishTexture(&syphonVoronoise);
