@@ -1,0 +1,8 @@
+
+// Output resolution
+#define RENDERWIDTH 3840
+#define RENDERHEIGHT 1080
+
+#define OSCRECEIVEPORT 7000
+#define OSCSENDPORT 7001
+#define OSCHOSTIP   "127.0.0.1"

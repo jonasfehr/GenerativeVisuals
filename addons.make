@@ -1,0 +1,4 @@
+ofxGui
+ofxOsc
+ofxAutoReloadedShader
+ofxSyphon
