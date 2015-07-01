@@ -76,7 +76,7 @@ void ofApp::setup(){
     paramArcs.setName("paramArcs");
     paramArcs.add(numOfArcs.set("numOfArcs", 10, 1, 140));
     paramArcs.add(heightAdjust.set("heightAdjust", 0.5, 0., 1.));
-    paramArcs.add(width_height.set("width_height", false));
+    paramArcs.add(width_height.set("width_height", true));
     
     
     

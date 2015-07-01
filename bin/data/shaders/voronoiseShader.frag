@@ -189,7 +189,7 @@ void main( )//out vec4 fragColor, in vec2 fragCoord )
     float a = 1.0;
     if (bgTransparent) a = c;
     if (bwSwitch) c = 1.0-c;
-    vec3 color = c * vec3( 0.4, 1.0, 0.9 );
+    vec3 color = c * vec3( 1., 1.0, 1. );
     
     // print t
    // vec2 fontsize = vec2(8.0, 15.0);

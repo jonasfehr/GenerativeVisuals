@@ -135,8 +135,8 @@ void main()
     float a = 1.0;
     if (bgTransparent) a = n;
     if (bwSwitch) n = 1.0-n;
-    col = n * vec3( 0.4, 1.0, 0.9 );
-    col = mix(col, vec3(0.5,0.5,0.4), 0.5*sin(time)-0.5);
+    col = n * vec3( 1.0, 1.0, 1.0);
+    //col = mix(col, vec3(0.5,0.5,0.4), 0.5*sin(time)-0.5);
     
 
     gl_FragColor = vec4(col, a);
