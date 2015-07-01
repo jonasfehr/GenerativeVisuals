@@ -166,5 +166,5 @@ void main() { // --------------------------------------
     d = clamp(d,0.0,d);
     
     //colormap(exp(-d))
-    gl_FragColor = vec4(vec3(exp(-d), 1.0);
-                        }
+    gl_FragColor = vec4(vec3(exp(-d)), 1.0);
+}
