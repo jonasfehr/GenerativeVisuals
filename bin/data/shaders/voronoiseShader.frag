@@ -2,11 +2,12 @@
 
 // ---> Shadertoy uniforms
 uniform vec3 iResolution;
-uniform float iGlobalTime;
+uniform float time;
+uniform float SCALE;
+uniform int OCTAVES;
 uniform float function;
 uniform bool multiply_by_F1;
 uniform bool multiply_by_F2;
-
 uniform bool inverse;
 uniform float distance_type;
 uniform bool bwSwitch;
@@ -27,15 +28,14 @@ uniform bool bgTransparent;
 // License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
 
 
-#define SCALE		   10.0		// 3.0
+//#define SCALE		   10.0		// 3.0
 #define BIAS   		   +0.0
 #define POWER			1.0		
-#define OCTAVES   		4		// 7
-#define SWITCH_TIME 	5.0		// seconds
-#define WARP_INTENSITY	0.00	// 0.06
-#define WARP_FREQUENCY	16.0
+//#define OCTAVES   		4		// 7
+//#define WARP_INTENSITY	0.00	// 0.06
+//#define WARP_FREQUENCY	16.0
 
-float t = iGlobalTime/SWITCH_TIME;
+float t = time;
 
 //
 // the following parameters identify the voronoi you're watching
@@ -125,7 +125,7 @@ float voronoi( in vec2 x )
         vec2 g = vec2(i,j);
         vec2 o = hash( n + g );
 
-        o = 0.5 + 0.41*sin( iGlobalTime + 6.2831*o ); // animate
+        o = 0.5 + 0.41*sin( t + 6.2831*o ); // animate
 
 		vec2 r = g - f + o;
 
@@ -183,8 +183,8 @@ void main( )//out vec4 fragColor, in vec2 fragCoord )
 {
 
     vec2 p = gl_FragCoord.xy/iResolution.xx;
-	float w = noise( p * WARP_FREQUENCY );
-	p += WARP_INTENSITY * vec2(w,-w);
+	//float w = noise( p * WARP_FREQUENCY );
+	//p += WARP_INTENSITY * vec2(w,-w);
     float c = POWER*fbm( SCALE*p ) + BIAS;
     float a = 1.0;
     if (bgTransparent) a = c;

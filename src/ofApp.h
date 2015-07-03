@@ -105,16 +105,25 @@ public:
     
     ofParameterGroup paramVoronoise;
     ofParameter<float> tempoVoronoise;
-    ofParameter<float> function;
+    ofParameter<float> scaleVoronoise;
+    ofParameter<int> octavesVoronoise;
+    ofParameter<int> function;
+    ofParameter<int> distance_type;
     ofParameter<bool>  multiply_by_F1;
     ofParameter<bool>  multiply_by_F2;
-
     ofParameter<bool>  inverse;
-    ofParameter<float> distance_type;
+
     
     ofParameterGroup paramPerlin;
-    ofParameter<float> tempoPerlin;
-    
+   // ofParameter<float> tempoPerlin;
+    ofParameter<float> density;
+    ofParameter<float> fRatio;
+    ofParameter<float> FirstDivision;
+    ofParameter<float> rotationSpeed;
+    ofParameter<float> fallingSpeed;
+    ofParameter<float> rotCenterX;
+    ofParameter<float> rotCenterY;
+
     
     ofParameterGroup paramSimplex;
     ofParameter<float> tempoSimplex;
@@ -125,6 +134,7 @@ public:
     float counterVoronoise;
     float counterPerlin;
     float counterSimplex;
+    float counterPerlinRot;
 
 
     

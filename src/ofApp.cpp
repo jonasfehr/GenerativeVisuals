@@ -83,16 +83,27 @@ void ofApp::setup(){
     // param for voronoiseShader
     paramVoronoise.setName("paramVoronoise");
     paramVoronoise.add(tempoVoronoise.set("tempoVoronoise", 0.5, 0., 1));
-    paramVoronoise.add(function.set("function", 1, 0., 10));
+    paramVoronoise.add(scaleVoronoise.set("scaleVoronoise", 10, 0., 40));
+    paramVoronoise.add(octavesVoronoise.set("octavesVoronoise", 8, 1, 16));
+    paramVoronoise.add(function.set("function", 1, 0., 3));
+    paramVoronoise.add(distance_type.set("distance_type", 1, 0., 3));
     paramVoronoise.add(multiply_by_F1.set("multiply_by_F1", false));
     paramVoronoise.add(multiply_by_F2.set("multiply_by_F2", false));
     paramVoronoise.add(inverse.set("inverse", false));
-    paramVoronoise.add(distance_type.set("distance_type", 1, 0., 10));
+
     
     
-    // param for voronoiseShader
+    // param for perlinShader
     paramPerlin.setName("paramPerlin");
-    paramPerlin.add(tempoPerlin.set("tempoPerlin", 0.1, 0., 1));
+ //   paramPerlin.add(tempoPerlin.set("tempoPerlin", 0.1, 0., 1));
+    paramPerlin.add(density.set("density", 1, 0.3, 10));
+
+    paramPerlin.add(fRatio.set("fRatio", 0.5, 0.1, 0.9));
+    paramPerlin.add(FirstDivision.set("FirstDivision", 1, 1., 10));
+    paramPerlin.add(rotationSpeed.set("rotationSpeed", 0.1, -1., 1));
+    paramPerlin.add(rotCenterX.set("rotCenterX", 0.5, 0., 1.));
+    paramPerlin.add(rotCenterY.set("rotCenterY", 0.5, 0., 1));
+
 
     
     // param for simplexShader
@@ -291,11 +302,11 @@ void ofApp::update(){
     // Counter for noises
     
     counterVoronoise += tempoVoronoise;
-    counterPerlin   += tempoPerlin;
-    counterSimplex += tempoSimplex/5;
+ //   counterPerlin   += tempoPerlin/2;
+    counterSimplex += tempoSimplex/10;
     
-    
-    
+    counterPerlinRot += rotationSpeed/100;
+
 }
 
 //--------------------------------------------------------------
@@ -368,7 +379,9 @@ void ofApp::draw(){
             voronoiseShader.begin();
             
                 voronoiseShader.setUniform3f("iResolution", RENDERWIDTH, RENDERHEIGHT, 0.0);
-                voronoiseShader.setUniform1f("iGlobalTime", counterVoronoise);
+                voronoiseShader.setUniform1f("time", counterVoronoise);
+                voronoiseShader.setUniform1f("SCALE", scaleVoronoise);
+                voronoiseShader.setUniform1i("OCTAVES", octavesVoronoise);
                 voronoiseShader.setUniform1f("function", function);
                 voronoiseShader.setUniform1i("multiply_by_F1", multiply_by_F1);
                 voronoiseShader.setUniform1i("multiply_by_F2", multiply_by_F2);
@@ -404,8 +417,13 @@ void ofApp::draw(){
             perlinShader.begin();
             
                 perlinShader.setUniform3f("iResolution", RENDERWIDTH, RENDERHEIGHT, 0.0);
-                perlinShader.setUniform1f("iGlobalTime", counterPerlin);
-        
+                perlinShader.setUniform1f("time", counterPerlin);
+                perlinShader.setUniform1f("density", density);
+
+                perlinShader.setUniform1f("fRatio", fRatio);
+                perlinShader.setUniform1f("FirstDivision", FirstDivision);
+                perlinShader.setUniform1f("theta", counterPerlinRot);
+                perlinShader.setUniform2f("rotCenter", rotCenterX, rotCenterY);
                 perlinShader.setUniform1i("bwSwitch", bwSwitch);
                 perlinShader.setUniform1i("bgTransparent", bgTransparent);
                 

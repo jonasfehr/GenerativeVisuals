@@ -2,14 +2,14 @@
 
 // ---> Shadertoy uniforms
 uniform vec3 iResolution;
-uniform float iGlobalTime;
-uniform float function;
-uniform bool multiply_by_F1;
-uniform bool multiply_by_F2;
-
-uniform bool inverse;
-uniform float distance_type;
+uniform float time;
+uniform float density;
+uniform float fRatio; // 0.1 - 0.9
+uniform float FirstDivision; // 1 - 10
+uniform float theta; //-0.01 - 0.01
 uniform bool bwSwitch;
+uniform bool bgTransparent;
+uniform vec2 rotCenter;
 
 
 //uniform vec4 iMouse;
@@ -30,7 +30,7 @@ uniform bool bwSwitch;
 #define NbScales 22.
 
 // Id of the lowest displayed scale (debug)
-#define FirstScale 0.
+#define FirstScale 1.
 
 // Anti aliasing
 #define LimitDetails 2.5
@@ -45,7 +45,7 @@ uniform bool bwSwitch;
 #define ZoomDistance 10.
 
 // Size of the first Perlin Noise grid (debug)
-#define FirstDivision 8.
+//#define FirstDivision 10.
 
 
 // 0 : multiplicative
@@ -55,11 +55,11 @@ uniform bool bwSwitch;
 #define GazConcentration 0.
 
 // Caracteristic ratio of the frequencies (0.5 for octaves)
-#define fRatio .5
+//#define fRatio .5
+//#define rotationSpeed -0.001
 
-float t = iGlobalTime;
+float t = time;
 
-float in1 = 1;
 float in2 = 2;
 
 
@@ -84,40 +84,23 @@ float noise( in vec2 p ) {
 
 // -----------------------------------------------
 
-vec3 colormap(float value) {
-    float maxv = ClampLevel;
-    vec3 c1,c2;
-    float t;
-    if (value < maxv / 3.) {
-        c1 = vec3(1.);   	   c2 = vec3(1., 1., .5);
-        t =  1./3.;
-    } else if (value < maxv * 2. / 3.) {
-        c1 = vec3(1., 1., .5); c2 = vec3(1., 0,  0.);
-        t =  2./3. ;
-    } else {
-        c1 = vec3(1., 0., 0.); c2 = vec3(0.);
-        t =  1.;
-    }
-    t = (t*maxv-value)/(maxv/3.);
-    return t*c1 + (1.-t)*c2;
-}
-
-void main() { // --------------------------------------
+void main() {
     vec2 uv = gl_FragCoord.xy/ iResolution.y;
     
-    float d = 1.; // initial density
+    float d = density; // initial density
     
 #if Anim
     float cycle = cos(mod(-t,100.)/100.*2.*3.14);
     float n_tiles_level_1 = exp(cycle*cycle*ZoomDistance)*pow(2.,FirstDivision);
 #else
-    float n_tiles_level_1 = exp(in1/iResolution.x*ZoomDistance)*pow(2.,FirstDivision);
+    float n_tiles_level_1 = exp(ZoomDistance)*pow(2.,FirstDivision); //exp(falling/iResolution.x*ZoomDistance)*pow(2.,FirstDivision);
+        //22000 = ~exp(ZoomDistance
 #endif
     
     // zoom and centering
-    uv = (uv - vec2(.9,.5))*n_tiles_level_1 + vec2(.9,.5);
+    float aspectRatio = iResolution.x/iResolution.y;
+    uv = (uv - vec2(rotCenter.x*aspectRatio,rotCenter.y))*n_tiles_level_1 + vec2(rotCenter.x*aspectRatio,rotCenter.y);
     
-    float theta = 4.+.008*t; // some rotations, not necessary
     mat2 m = fRatio*mat2( cos(theta),sin(theta),
                          -sin(theta),cos(theta) );
     
@@ -165,6 +148,5 @@ void main() { // --------------------------------------
     }
     d = clamp(d,0.0,d);
     
-    //colormap(exp(-d))
     gl_FragColor = vec4(vec3(exp(-d)), 1.0);
 }
