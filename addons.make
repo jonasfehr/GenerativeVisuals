@@ -1,4 +1,0 @@
-ofxGui
-ofxOsc
-ofxAutoReloadedShader
-ofxSyphon

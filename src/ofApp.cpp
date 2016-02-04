@@ -16,11 +16,11 @@ void ofApp::setup(){
     /*
     
     // FBO renders
-    renderLines.allocate(RENDERWIDTH, RENDERHEIGHT);
-    renderArcs.allocate(RENDERWIDTH, RENDERHEIGHT);
-    renderVoronoise.allocate(RENDERWIDTH, RENDERHEIGHT);
-    renderPerlin.allocate(RENDERWIDTH, RENDERHEIGHT);
-    renderSimplex.allocate(RENDERWIDTH, RENDERHEIGHT);
+    renderLines.allocate(render_widthIDTH, render_heightEIGHT);
+    renderArcs.allocate(render_widthIDTH, render_heightEIGHT);
+    renderVoronoise.allocate(render_widthIDTH, render_heightEIGHT);
+    renderPerlin.allocate(render_widthIDTH, render_heightEIGHT);
+    renderSimplex.allocate(render_widthIDTH, render_heightEIGHT);
 
     
     
@@ -33,11 +33,11 @@ void ofApp::setup(){
     syphonOutSimplex.setName("Simplex");
 
     
-    syphonLines.allocate(RENDERWIDTH, RENDERHEIGHT, GL_RGBA);
-    syphonArcs.allocate(RENDERWIDTH, RENDERHEIGHT, GL_RGBA);
-    syphonVoronoise.allocate(RENDERWIDTH, RENDERHEIGHT, GL_RGBA);
-    syphonPerlin.allocate(RENDERWIDTH, RENDERHEIGHT, GL_RGBA);
-    syphonSimplex.allocate(RENDERWIDTH, RENDERHEIGHT, GL_RGBA);
+    syphonLines.allocate(render_widthIDTH, render_heightEIGHT, GL_RGBA);
+    syphonArcs.allocate(render_widthIDTH, render_heightEIGHT, GL_RGBA);
+    syphonVoronoise.allocate(render_widthIDTH, render_heightEIGHT, GL_RGBA);
+    syphonPerlin.allocate(render_widthIDTH, render_heightEIGHT, GL_RGBA);
+    syphonSimplex.allocate(render_widthIDTH, render_heightEIGHT, GL_RGBA);
     
     
     syphonLines = renderLines.getTextureReference();
@@ -51,12 +51,14 @@ void ofApp::setup(){
     voronoiseShader.load("shaders/voronoiseShader");
     perlinShader.load("shaders/perlinShader");
     simplexShader.load("shaders/simplexShader");
+    ikedaShader.load("shaders/ikeda");
+
     
     // setup Gui
     
     screenSize.setName("Screen Size");
-    screenSize.add(width.set("width",100,10,3000));
-    screenSize.add(height.set("height",100,10,3000));
+    screenSize.add(render_width.set("render_width",100,10,3000));
+    screenSize.add(render_height.set("render_height",100,10,3000));
     
     paramGeneral.setName("Enable");
     paramGeneral.add(linesHorizontal.set("linesHorizontal", true));
@@ -65,6 +67,7 @@ void ofApp::setup(){
     paramGeneral.add(voronoise.set("voronoise", true));
     paramGeneral.add(perlin.set("perlin", true));
     paramGeneral.add(simplex.set("simplex", true));
+    paramGeneral.add(ikeda.set("ikeda", true));
     
     paramGeneral.add(BPM.set("BPM", 120, 10, 180));
     paramGeneral.add(BPW.set("BPW", 4, 1, 16));
@@ -117,6 +120,11 @@ void ofApp::setup(){
     paramSimplex.add(tempoSimplex.set("tempoSimplex", 0.1, 0., 1));
     paramSimplex.add(in1.set("in1", 1, 0., 1000));
     paramSimplex.add(zoom.set("zoom", 0.1, 0., 1));
+    
+    // param for Ikeda
+    paramIkeda.setName("ikeda");
+    paramIkeda.add(tempoIkeda.set("tempoIkeda", 0.1, 0., 1));
+    paramIkeda.add(amount.set("amount", 0.1, 0., 1));
 
 
     // setGui
@@ -128,21 +136,23 @@ void ofApp::setup(){
     parameters.add(paramVoronoise);
     parameters.add(paramPerlin);
     parameters.add(paramSimplex);
+    parameters.add(paramIkeda);
+
     
     gui.setup(parameters);
     guiShow = true;
     
     //
     gui.loadFromFile("settings.xml");
-    int renderW = width;
-    int renderH = height;
+
     
-    renderLines.allocate(renderW, renderH);
-    renderArcs.allocate(renderW, renderH);
-    renderVoronoise.allocate(renderW, renderH);
-    renderPerlin.allocate(renderW, renderH);
-    renderSimplex.allocate(renderW, renderH);
-    
+    renderLines.allocate(render_width, render_height);
+    renderArcs.allocate(render_width, render_height);
+    renderVoronoise.allocate(render_width, render_height);
+    renderPerlin.allocate(render_width, render_height);
+    renderSimplex.allocate(render_width, render_height);
+    renderIkeda.allocate(render_width, render_height);
+
     
     // Syphon
     syphonOutLines.setName("Lines");
@@ -150,22 +160,26 @@ void ofApp::setup(){
     syphonOutVoronoise.setName("Voronoise");
     syphonOutPerlin.setName("Perlin");
     syphonOutSimplex.setName("Simplex");
+    syphonOutIkeda.setName("Ikeda");
+
     
+//    syphonLines.allocate(render_width, render_height, GL_RGBA);
+//    syphonArcs.allocate(render_width, render_height, GL_RGBA);
+//    syphonVoronoise.allocate(render_width, render_height, GL_RGBA);
+//    syphonPerlin.allocate(render_width, render_height, GL_RGBA);
+//    syphonSimplex.allocate(render_width, render_height, GL_RGBA);
+//    syphonIkeda.allocate(render_width, render_height, GL_RGBA);
+
     
-    syphonLines.allocate(renderW, renderH, GL_RGBA);
-    syphonArcs.allocate(renderW, renderH, GL_RGBA);
-    syphonVoronoise.allocate(renderW, renderH, GL_RGBA);
-    syphonPerlin.allocate(renderW, renderH, GL_RGBA);
-    syphonSimplex.allocate(renderW, renderH, GL_RGBA);
+//    syphonLines = renderLines.getTexture();
+//    syphonArcs = renderArcs.getTexture();
+//    syphonVoronoise = renderVoronoise.getTexture();
+//    syphonPerlin = renderPerlin.getTexture();
+//    syphonSimplex = renderSimplex.getTexture();
+//    syphonIkeda = renderSimplex.getTexture();
+
     
-    
-    syphonLines = renderLines.getTexture();
-    syphonArcs = renderArcs.getTexture();
-    syphonVoronoise = renderVoronoise.getTexture();
-    syphonPerlin = renderPerlin.getTexture();
-    syphonSimplex = renderSimplex.getTexture();
-    
-    ofSetWindowShape(width/10+230, (height/10+10)*5+10);
+    ofSetWindowShape(render_width/10+230, (render_height/10+10)*5+10);
     
     
     // OSC
@@ -219,8 +233,8 @@ void ofApp::setup(){
     counterVoronoise = 0;
     counterPerlin = 0;
     counterVoronoise = 0;
-    
-    
+    counterIkeda = 0;
+
 }
 
 //-------------------
@@ -349,6 +363,9 @@ void ofApp::update(){
     counterSimplex += tempoSimplex/10;
     
     counterPerlinRot += rotationSpeed/100;
+    
+    counterIkeda += tempoIkeda/10;
+
 
 }
 
@@ -421,7 +438,7 @@ void ofApp::draw(){
         
             voronoiseShader.begin();
             
-                voronoiseShader.setUniform3f("iResolution", RENDERWIDTH, RENDERHEIGHT, 0.0);
+                voronoiseShader.setUniform3f("iResolution", render_width, render_height, 0.0);
                 voronoiseShader.setUniform1f("time", counterVoronoise);
                 voronoiseShader.setUniform1f("SCALE", scaleVoronoise);
                 voronoiseShader.setUniform1i("OCTAVES", octavesVoronoise);
@@ -459,7 +476,7 @@ void ofApp::draw(){
         
             perlinShader.begin();
             
-                perlinShader.setUniform3f("iResolution", RENDERWIDTH, RENDERHEIGHT, 0.0);
+                perlinShader.setUniform3f("iResolution", render_width, render_height, 0.0);
                 perlinShader.setUniform1f("time", counterPerlin);
                 perlinShader.setUniform1f("density", density);
 
@@ -484,33 +501,66 @@ void ofApp::draw(){
     if(simplex){
         
         renderSimplex.begin();
-            glClearColor(0.0, 0.0, 0.0, 0.0);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            
-            if(!bgTransparent){// ofBackground(bgColor);
-                
-                ofSetColor(bgColor);
-                ofFill();
-                ofDrawRectangle(0, 0, renderPerlin.getWidth(), renderPerlin.getHeight());
-            }
+        glClearColor(0.0, 0.0, 0.0, 0.0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
-            simplexShader.begin();
+        if(!bgTransparent){// ofBackground(bgColor);
             
-                simplexShader.setUniform3f("iResolution", RENDERWIDTH, RENDERHEIGHT, 0.0);
-                simplexShader.setUniform1f("time", counterSimplex);
-                simplexShader.setUniform1f("in1", in1);
-                simplexShader.setUniform1f("zoom", zoom);
-                simplexShader.setUniform1i("bwSwitch", bwSwitch);
-                simplexShader.setUniform1i("bgTransparent", bgTransparent);
-    
+            ofSetColor(bgColor);
+            ofFill();
+            ofDrawRectangle(0, 0, renderPerlin.getWidth(), renderPerlin.getHeight());
+        }
         
-                ofSetColor(255,255,255);
-                ofFill();
-                ofDrawRectangle(0, 0, renderSimplex.getWidth(), renderSimplex.getHeight());
-            
-            simplexShader.end();
+        simplexShader.begin();
+        
+        simplexShader.setUniform3f("iResolution", render_width, render_height, 0.0);
+        simplexShader.setUniform1f("time", counterSimplex);
+        simplexShader.setUniform1f("in1", in1);
+        simplexShader.setUniform1f("zoom", zoom);
+        simplexShader.setUniform1i("bwSwitch", bwSwitch);
+        simplexShader.setUniform1i("bgTransparent", bgTransparent);
+        
+        
+        ofSetColor(255,255,255);
+        ofFill();
+        ofDrawRectangle(0, 0, renderSimplex.getWidth(), renderSimplex.getHeight());
+        
+        simplexShader.end();
         
         renderSimplex.end();
+        
+    }
+    
+    if(ikeda){
+        
+        renderIkeda.begin();
+        glClearColor(0.0, 0.0, 0.0, 0.0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        
+        if(!bgTransparent){// ofBackground(bgColor);
+            
+            ofSetColor(bgColor);
+            ofFill();
+            ofDrawRectangle(0, 0, renderPerlin.getWidth(), renderPerlin.getHeight());
+        }
+        
+        ikedaShader.begin();
+        
+        ikedaShader.setUniform2f("u_resolution",render_width, render_height);
+        ikedaShader.setUniform1f("u_time", counterIkeda);
+        ikedaShader.setUniform1f("u_amount", amount);
+        ikedaShader.setUniform1i("bwSwitch", bwSwitch);
+        ikedaShader.setUniform1i("bgTransparent", bgTransparent);
+
+        
+        
+        ofSetColor(255,255,255);
+        ofFill();
+        ofDrawRectangle(0, 0, renderIkeda.getWidth(), renderIkeda.getHeight());
+        
+        ikedaShader.end();
+        
+        renderIkeda.end();
         
     }
     
@@ -519,12 +569,9 @@ void ofApp::draw(){
     
     ofPushMatrix();
     
-    int renderW = width;
-    int renderH = height;
-    
     ofSetColor(255);
-    int previewWidth = renderW/10;
-    int previewHeight = renderH/10;
+    int previewWidth = render_width/10;
+    int previewHeight = render_height/10;
     
     ofTranslate(220, 10);
     ofFill();
@@ -566,6 +613,14 @@ void ofApp::draw(){
     ofSetColor(drawColor);
     ofDrawRectangle(0, 0, previewWidth, previewHeight);
     
+    ofTranslate(0, 10+previewHeight);
+    ofFill();
+    ofSetColor(255);
+    if( ikeda ) renderIkeda.draw(0, 0, previewWidth, previewHeight);
+    ofNoFill();
+    ofSetColor(drawColor);
+    ofDrawRectangle(0, 0, previewWidth, previewHeight);
+    
     ofPopMatrix();
     
     if( guiShow ){
@@ -580,11 +635,12 @@ void ofApp::draw(){
     
     // Output Syphon
     ofFill(); // 10.9 fix
-    syphonOutLines.publishTexture(&syphonLines);
-    syphonOutArcs.publishTexture(&syphonArcs);
-    syphonOutVoronoise.publishTexture(&syphonVoronoise);
-    syphonOutPerlin.publishTexture(&syphonPerlin);
-    syphonOutSimplex.publishTexture(&syphonSimplex);
+    syphonOutLines.publishTexture(&renderLines.getTexture());
+    syphonOutArcs.publishTexture(&renderArcs.getTexture());
+    syphonOutVoronoise.publishTexture(&renderVoronoise.getTexture());
+    syphonOutPerlin.publishTexture(&renderPerlin.getTexture());
+    syphonOutSimplex.publishTexture(&renderSimplex.getTexture());
+    syphonOutIkeda.publishTexture(&renderIkeda.getTexture());
 
     
 }

@@ -45,6 +45,7 @@ public:
     ofxAutoReloadedShader voronoiseShader;
     ofxAutoReloadedShader perlinShader;
     ofxAutoReloadedShader simplexShader;
+    ofxAutoReloadedShader ikedaShader;
     
     // OSC
    // ofxOscReceiver oscReceiver;
@@ -58,13 +59,7 @@ public:
     ofxSyphonServer syphonOutVoronoise;
     ofxSyphonServer syphonOutPerlin;
     ofxSyphonServer syphonOutSimplex;
-
-    
-    ofTexture syphonLines;
-    ofTexture syphonArcs;
-    ofTexture syphonVoronoise;
-    ofTexture syphonPerlin;
-    ofTexture syphonSimplex;
+    ofxSyphonServer syphonOutIkeda;
 
     
     // GUI / Controlpanel
@@ -72,6 +67,12 @@ public:
     ofxPanel gui;
     ofParameterGroup parameters;
     
+    //define RenderSize
+    ofParameterGroup screenSize;
+    ofParameter<int> render_width;
+    ofParameter<int> render_height;
+    
+    // Enable the different renderers
     ofParameterGroup paramEnable;
 
     ofParameter<bool>  linesHorizontal;
@@ -80,6 +81,8 @@ public:
     ofParameter<bool>  voronoise;
     ofParameter<bool>  perlin;
     ofParameter<bool>  simplex;
+    ofParameter<bool>  ikeda;
+
 
     
     ofParameterGroup paramGeneral;
@@ -131,17 +134,17 @@ public:
     ofParameter<float> in1;
     ofParameter<float> zoom;
     
-    //Karina
-    ofParameterGroup screenSize;
-    ofParameter<int> width;
-    ofParameter<int> height;
-    //Karina end
+    ofParameterGroup paramIkeda;
+    ofParameter<float> tempoIkeda;
+    ofParameter<float> amount;
+
     
     // tempo for noises
     float counterVoronoise;
     float counterPerlin;
     float counterSimplex;
     float counterPerlinRot;
+    float counterIkeda;
 
 
     
@@ -160,6 +163,7 @@ public:
     ofFbo renderVoronoise;
     ofFbo renderPerlin;
     ofFbo renderSimplex;
+    ofFbo renderIkeda;
 
 
 

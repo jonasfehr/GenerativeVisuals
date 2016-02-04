@@ -68,8 +68,8 @@ void randomLine::updateIndependent(){
 void randomLine::draw(){
     
     if(direction){
-        ofRect(0,posCurrent, length, widthCurrent);
+        ofDrawRectangle(0,posCurrent, length, widthCurrent);
     }else{
-        ofRect(posCurrent, 0, widthCurrent, length);
+        ofDrawRectangle(posCurrent, 0, widthCurrent, length);
     }
 }
