@@ -177,6 +177,8 @@ public:
     
     
     int draggedX, draggedY, clickX, clickY;
+    
+    bool keyIsDown[255];
 
 
 };

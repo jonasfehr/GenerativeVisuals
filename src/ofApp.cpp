@@ -234,6 +234,11 @@ void ofApp::setup(){
     counterPerlin = 0;
     counterVoronoise = 0;
     counterIkeda = 0;
+    
+    
+    for(int i = 0; i<255; i++ ){
+        keyIsDown[i] = false;
+    }
 
 }
 
@@ -692,9 +697,11 @@ void ofApp::deleteVerticalLine(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-    if( key == 'h' ){
-        guiShow = !guiShow;
-    }
+//    if( key == 'h' ){
+//        guiShow = !guiShow;
+//    }
+    keyIsDown[key] = true;
+    
     if(key == 's') {
         gui.saveToFile("settings.xml");
     }
@@ -710,6 +717,20 @@ void ofApp::keyPressed(int key){
     if(key == 'x') {
         timer = 1;
     }
+    
+    if(keyIsDown['h'] && key == OF_KEY_LEFT) {
+        render_height--;
+    }
+    if(keyIsDown['h'] && key == OF_KEY_RIGHT) {
+        render_height++;
+    }
+    if(keyIsDown['w'] && key == OF_KEY_LEFT) {
+        render_width--;
+    }
+    if(keyIsDown['w'] && key == OF_KEY_RIGHT) {
+        render_width++;
+    }
+    
 }
 //--------------------------------------------------------------
 void ofApp::exit(){
@@ -718,6 +739,7 @@ void ofApp::exit(){
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
+    keyIsDown[key] = false;
     
 }
 
