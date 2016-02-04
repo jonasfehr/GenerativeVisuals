@@ -10,6 +10,9 @@ uniform vec2 u_resolution;
 uniform float u_amount;
 uniform float u_time;
 
+uniform float u_xGrid;
+uniform float u_yGrid;
+
 uniform bool bwSwitch;
 uniform bool bgTransparent;
 
@@ -30,7 +33,8 @@ void main() {
     vec2 st = gl_FragCoord.xy/u_resolution.xy;
     st.x *= u_resolution.x/u_resolution.y;
 
-    vec2 grid = vec2(100.0,50.);
+    vec2 grid = vec2(u_xGrid,u_yGrid);
+    //vec2 grid = vec2(100.,200.);
     st *= grid;
     
     vec2 ipos = floor(st);  // integer

@@ -1,7 +1,7 @@
 <parameters>
 	<Screen_Size>
-		<render_width>986</render_width>
-		<render_height>1352</render_height>
+		<render_width>1024</render_width>
+		<render_height>1024</render_height>
 	</Screen_Size>
 	<Enable>
 		<linesHorizontal>1</linesHorizontal>
@@ -52,5 +52,8 @@
 	<ikeda>
 		<tempoIkeda>0.1</tempoIkeda>
 		<amount>0.1</amount>
+		<xGrid>10</xGrid>
+		<yGrid>10</yGrid>
 	</ikeda>
+<parameters/>
 </parameters>

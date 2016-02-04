@@ -137,6 +137,8 @@ public:
     ofParameterGroup paramIkeda;
     ofParameter<float> tempoIkeda;
     ofParameter<float> amount;
+    ofParameter<float> xGrid;
+    ofParameter<float> yGrid;
 
     
     // tempo for noises

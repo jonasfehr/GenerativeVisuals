@@ -125,6 +125,8 @@ void ofApp::setup(){
     paramIkeda.setName("ikeda");
     paramIkeda.add(tempoIkeda.set("tempoIkeda", 0.1, 0., 1));
     paramIkeda.add(amount.set("amount", 0.1, 0., 1));
+    paramIkeda.add(xGrid.set("xGrid",10,10,200));
+    paramIkeda.add(yGrid.set("yGrid",10,10,200));
 
 
     // setGui
@@ -179,7 +181,7 @@ void ofApp::setup(){
 //    syphonIkeda = renderSimplex.getTexture();
 
     
-    ofSetWindowShape(render_width/10+230, (render_height/10+10)*5+10);
+    ofSetWindowShape(render_width/10+230, (render_height/10+10)*6+10);
     
     
     // OSC
@@ -554,6 +556,8 @@ void ofApp::draw(){
         ikedaShader.setUniform2f("u_resolution",render_width, render_height);
         ikedaShader.setUniform1f("u_time", counterIkeda);
         ikedaShader.setUniform1f("u_amount", amount);
+        ikedaShader.setUniform1f("u_xGrid", xGrid);
+        ikedaShader.setUniform1f("u_yGrid", yGrid);
         ikedaShader.setUniform1i("bwSwitch", bwSwitch);
         ikedaShader.setUniform1i("bgTransparent", bgTransparent);
 
