@@ -17,6 +17,7 @@ public:
     void setup();
     void update();
     void draw();
+    void exit();
 
     
     void addNewArc();
@@ -129,6 +130,12 @@ public:
     ofParameter<float> tempoSimplex;
     ofParameter<float> in1;
     ofParameter<float> zoom;
+    
+    //Karina
+    ofParameterGroup screenSize;
+    ofParameter<int> width;
+    ofParameter<int> height;
+    //Karina end
     
     // tempo for noises
     float counterVoronoise;

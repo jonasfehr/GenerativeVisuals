@@ -3,6 +3,8 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     
+    
+    
     ofSetFrameRate(60);
     ofSetWindowTitle("GenerativeVisuals");
     ofEnableSmoothing();
@@ -11,7 +13,7 @@ void ofApp::setup(){
     ofSetCircleResolution(10);
 
     
-    
+    /*
     
     // FBO renders
     renderLines.allocate(RENDERWIDTH, RENDERHEIGHT);
@@ -43,7 +45,7 @@ void ofApp::setup(){
     syphonVoronoise = renderVoronoise.getTextureReference();
     syphonPerlin = renderPerlin.getTextureReference();
     syphonSimplex = renderSimplex.getTextureReference();
-    
+    */
     
     //VoronoiseRender
     voronoiseShader.load("shaders/voronoiseShader");
@@ -51,6 +53,10 @@ void ofApp::setup(){
     simplexShader.load("shaders/simplexShader");
     
     // setup Gui
+    
+    screenSize.setName("Screen Size");
+    screenSize.add(width.set("width",100,10,3000));
+    screenSize.add(height.set("height",100,10,3000));
     
     paramGeneral.setName("Enable");
     paramGeneral.add(linesHorizontal.set("linesHorizontal", true));
@@ -115,6 +121,7 @@ void ofApp::setup(){
 
     // setGui
     parameters.setName("parameters");
+    parameters.add(screenSize);
     parameters.add(paramGeneral);
     parameters.add(paramLines);
     parameters.add(paramArcs);
@@ -124,6 +131,42 @@ void ofApp::setup(){
     
     gui.setup(parameters);
     guiShow = true;
+    
+    //
+    gui.loadFromFile("settings.xml");
+    int renderW = width;
+    int renderH = height;
+    
+    renderLines.allocate(renderW, renderH);
+    renderArcs.allocate(renderW, renderH);
+    renderVoronoise.allocate(renderW, renderH);
+    renderPerlin.allocate(renderW, renderH);
+    renderSimplex.allocate(renderW, renderH);
+    
+    
+    // Syphon
+    syphonOutLines.setName("Lines");
+    syphonOutArcs.setName("Arcs");
+    syphonOutVoronoise.setName("Voronoise");
+    syphonOutPerlin.setName("Perlin");
+    syphonOutSimplex.setName("Simplex");
+    
+    
+    syphonLines.allocate(renderW, renderH, GL_RGBA);
+    syphonArcs.allocate(renderW, renderH, GL_RGBA);
+    syphonVoronoise.allocate(renderW, renderH, GL_RGBA);
+    syphonPerlin.allocate(renderW, renderH, GL_RGBA);
+    syphonSimplex.allocate(renderW, renderH, GL_RGBA);
+    
+    
+    syphonLines = renderLines.getTexture();
+    syphonArcs = renderArcs.getTexture();
+    syphonVoronoise = renderVoronoise.getTexture();
+    syphonPerlin = renderPerlin.getTexture();
+    syphonSimplex = renderSimplex.getTexture();
+    
+    ofSetWindowShape(width/10+230, (height/10+10)*5+10);
+    
     
     // OSC
    // oscReceiver.setup(OSCRECEIVEPORT);
@@ -373,7 +416,7 @@ void ofApp::draw(){
                 
                 ofSetColor(bgColor);
                 ofFill();
-                ofRect(0, 0, renderPerlin.getWidth(), renderPerlin.getHeight());
+                ofDrawRectangle(0, 0, renderPerlin.getWidth(), renderPerlin.getHeight());
             }
         
             voronoiseShader.begin();
@@ -393,7 +436,7 @@ void ofApp::draw(){
                 
                 ofSetColor(255,255,255);
                 ofFill();
-                ofRect(0, 0, renderVoronoise.getWidth(), renderVoronoise.getHeight());
+                ofDrawRectangle(0, 0, renderVoronoise.getWidth(), renderVoronoise.getHeight());
             
             voronoiseShader.end();
         
@@ -411,7 +454,7 @@ void ofApp::draw(){
                 
             ofSetColor(bgColor);
             ofFill();
-            ofRect(0, 0, renderPerlin.getWidth(), renderPerlin.getHeight());
+            ofDrawRectangle(0, 0, renderPerlin.getWidth(), renderPerlin.getHeight());
             }
         
             perlinShader.begin();
@@ -430,7 +473,7 @@ void ofApp::draw(){
                 
                 ofSetColor(255,255,255);
                 ofFill();
-                ofRect(0, 0, renderPerlin.getWidth(), renderPerlin.getHeight());
+                ofDrawRectangle(0, 0, renderPerlin.getWidth(), renderPerlin.getHeight());
             
             perlinShader.end();
         
@@ -448,7 +491,7 @@ void ofApp::draw(){
                 
                 ofSetColor(bgColor);
                 ofFill();
-                ofRect(0, 0, renderPerlin.getWidth(), renderPerlin.getHeight());
+                ofDrawRectangle(0, 0, renderPerlin.getWidth(), renderPerlin.getHeight());
             }
         
             simplexShader.begin();
@@ -463,7 +506,7 @@ void ofApp::draw(){
         
                 ofSetColor(255,255,255);
                 ofFill();
-                ofRect(0, 0, renderSimplex.getWidth(), renderSimplex.getHeight());
+                ofDrawRectangle(0, 0, renderSimplex.getWidth(), renderSimplex.getHeight());
             
             simplexShader.end();
         
@@ -476,9 +519,12 @@ void ofApp::draw(){
     
     ofPushMatrix();
     
+    int renderW = width;
+    int renderH = height;
+    
     ofSetColor(255);
-    int previewWidth = RENDERWIDTH/10;
-    int previewHeight = RENDERHEIGHT/10;
+    int previewWidth = renderW/10;
+    int previewHeight = renderH/10;
     
     ofTranslate(220, 10);
     ofFill();
@@ -486,7 +532,7 @@ void ofApp::draw(){
     if(linesHorizontal || linesVertical) renderLines.draw(0, 0, previewWidth, previewHeight);
     ofNoFill();
     ofSetColor(drawColor);
-    ofRect(0, 0, previewWidth, previewHeight);
+    ofDrawRectangle(0, 0, previewWidth, previewHeight);
     
     ofTranslate(0, 10+previewHeight);
     ofFill();
@@ -494,7 +540,7 @@ void ofApp::draw(){
     if( arcFlag ) renderArcs.draw(0, 0, previewWidth, previewHeight);
     ofNoFill();
     ofSetColor(drawColor);
-    ofRect(0, 0, previewWidth, previewHeight);
+    ofDrawRectangle(0, 0, previewWidth, previewHeight);
     
     ofTranslate(0, 10+previewHeight);
     ofFill();
@@ -502,7 +548,7 @@ void ofApp::draw(){
     if( voronoise ) renderVoronoise.draw(0, 0, previewWidth, previewHeight);
     ofNoFill();
     ofSetColor(drawColor);
-    ofRect(0, 0, previewWidth, previewHeight);
+    ofDrawRectangle(0, 0, previewWidth, previewHeight);
     
     ofTranslate(0, 10+previewHeight);
     ofFill();
@@ -510,7 +556,7 @@ void ofApp::draw(){
     if( perlin ) renderPerlin.draw(0, 0, previewWidth, previewHeight);
     ofNoFill();
     ofSetColor(drawColor);
-    ofRect(0, 0, previewWidth, previewHeight);
+    ofDrawRectangle(0, 0, previewWidth, previewHeight);
     
     ofTranslate(0, 10+previewHeight);
     ofFill();
@@ -518,7 +564,7 @@ void ofApp::draw(){
     if( simplex ) renderSimplex.draw(0, 0, previewWidth, previewHeight);
     ofNoFill();
     ofSetColor(drawColor);
-    ofRect(0, 0, previewWidth, previewHeight);
+    ofDrawRectangle(0, 0, previewWidth, previewHeight);
     
     ofPopMatrix();
     
@@ -608,6 +654,10 @@ void ofApp::keyPressed(int key){
     if(key == 'x') {
         timer = 1;
     }
+}
+//--------------------------------------------------------------
+void ofApp::exit(){
+    gui.saveToFile("settings.xml");
 }
 
 //--------------------------------------------------------------
