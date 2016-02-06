@@ -46,6 +46,7 @@ public:
     ofxAutoReloadedShader perlinShader;
     ofxAutoReloadedShader simplexShader;
     ofxAutoReloadedShader ikedaShader;
+    ofxAutoReloadedShader cloudShader;
     
     // OSC
    // ofxOscReceiver oscReceiver;
@@ -60,6 +61,7 @@ public:
     ofxSyphonServer syphonOutPerlin;
     ofxSyphonServer syphonOutSimplex;
     ofxSyphonServer syphonOutIkeda;
+    ofxSyphonServer syphonOutCloud;
 
     
     // GUI / Controlpanel
@@ -82,6 +84,7 @@ public:
     ofParameter<bool>  perlin;
     ofParameter<bool>  simplex;
     ofParameter<bool>  ikeda;
+    ofParameter<bool>  cloud;
 
 
     
@@ -139,6 +142,12 @@ public:
     ofParameter<float> amount;
     ofParameter<float> xGrid;
     ofParameter<float> yGrid;
+    
+    ofParameterGroup paramCloud;
+    ofParameter<float> tempoCloud;
+    ofParameter<float> zoomCloud;
+    ofParameter<float> balance;
+    ofParameter<float> contrast;
 
     
     // tempo for noises
@@ -147,6 +156,7 @@ public:
     float counterSimplex;
     float counterPerlinRot;
     float counterIkeda;
+    float counterCloud;
 
 
     
@@ -166,6 +176,7 @@ public:
     ofFbo renderPerlin;
     ofFbo renderSimplex;
     ofFbo renderIkeda;
+    ofFbo renderCloud;
 
 
 

@@ -52,6 +52,7 @@ void ofApp::setup(){
     perlinShader.load("shaders/perlinShader");
     simplexShader.load("shaders/simplexShader");
     ikedaShader.load("shaders/ikeda");
+    cloudShader.load("shaders/cloud");
 
     
     // setup Gui
@@ -68,6 +69,7 @@ void ofApp::setup(){
     paramGeneral.add(perlin.set("perlin", true));
     paramGeneral.add(simplex.set("simplex", true));
     paramGeneral.add(ikeda.set("ikeda", true));
+    paramGeneral.add(cloud.set("cloud", true));
     
     paramGeneral.add(BPM.set("BPM", 120, 10, 180));
     paramGeneral.add(BPW.set("BPW", 4, 1, 16));
@@ -127,6 +129,13 @@ void ofApp::setup(){
     paramIkeda.add(amount.set("amount", 0.1, 0., 1));
     paramIkeda.add(xGrid.set("xGrid",10,10,200));
     paramIkeda.add(yGrid.set("yGrid",10,10,200));
+    
+    // param for Cloud
+    paramCloud.setName("cloud");
+    paramCloud.add(tempoCloud.set("tempoCloud", 0.1, 0., 1));
+    paramCloud.add(zoomCloud.set("zoomCloud", 0.1, 0., 1));
+    paramCloud.add(balance.set("balance",0.5,0.,1.));
+    paramCloud.add(contrast.set("contrast",0.,-1,1.));
 
 
     // setGui
@@ -139,6 +148,8 @@ void ofApp::setup(){
     parameters.add(paramPerlin);
     parameters.add(paramSimplex);
     parameters.add(paramIkeda);
+    parameters.add(paramCloud);
+
 
     
     gui.setup(parameters);
@@ -154,6 +165,7 @@ void ofApp::setup(){
     renderPerlin.allocate(render_width, render_height);
     renderSimplex.allocate(render_width, render_height);
     renderIkeda.allocate(render_width, render_height);
+    renderCloud.allocate(render_width, render_height);
 
     
     // Syphon
@@ -163,25 +175,11 @@ void ofApp::setup(){
     syphonOutPerlin.setName("Perlin");
     syphonOutSimplex.setName("Simplex");
     syphonOutIkeda.setName("Ikeda");
+    syphonOutCloud.setName("Cloud");
+
 
     
-//    syphonLines.allocate(render_width, render_height, GL_RGBA);
-//    syphonArcs.allocate(render_width, render_height, GL_RGBA);
-//    syphonVoronoise.allocate(render_width, render_height, GL_RGBA);
-//    syphonPerlin.allocate(render_width, render_height, GL_RGBA);
-//    syphonSimplex.allocate(render_width, render_height, GL_RGBA);
-//    syphonIkeda.allocate(render_width, render_height, GL_RGBA);
-
-    
-//    syphonLines = renderLines.getTexture();
-//    syphonArcs = renderArcs.getTexture();
-//    syphonVoronoise = renderVoronoise.getTexture();
-//    syphonPerlin = renderPerlin.getTexture();
-//    syphonSimplex = renderSimplex.getTexture();
-//    syphonIkeda = renderSimplex.getTexture();
-
-    
-    ofSetWindowShape(render_width/10+230, (render_height/10+10)*6+10);
+    ofSetWindowShape(render_width/10+230, (render_height/10+10)*7+10);
     
     
     // OSC
@@ -236,6 +234,7 @@ void ofApp::setup(){
     counterPerlin = 0;
     counterVoronoise = 0;
     counterIkeda = 0;
+    counterCloud = 0;
     
     
     for(int i = 0; i<255; i++ ){
@@ -372,6 +371,7 @@ void ofApp::update(){
     counterPerlinRot += rotationSpeed/100;
     
     counterIkeda += tempoIkeda/10;
+    counterCloud += tempoCloud/10;
 
 
 }
@@ -548,7 +548,7 @@ void ofApp::draw(){
             
             ofSetColor(bgColor);
             ofFill();
-            ofDrawRectangle(0, 0, renderPerlin.getWidth(), renderPerlin.getHeight());
+            ofDrawRectangle(0, 0, renderIkeda.getWidth(), renderIkeda.getHeight());
         }
         
         ikedaShader.begin();
@@ -560,7 +560,7 @@ void ofApp::draw(){
         ikedaShader.setUniform1f("u_yGrid", yGrid);
         ikedaShader.setUniform1i("bwSwitch", bwSwitch);
         ikedaShader.setUniform1i("bgTransparent", bgTransparent);
-
+        
         
         
         ofSetColor(255,255,255);
@@ -570,6 +570,41 @@ void ofApp::draw(){
         ikedaShader.end();
         
         renderIkeda.end();
+        
+    }
+    
+    if(cloud){
+        
+        renderCloud.begin();
+        glClearColor(0.0, 0.0, 0.0, 0.0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        
+        if(!bgTransparent){// ofBackground(bgColor);
+            
+            ofSetColor(bgColor);
+            ofFill();
+            ofDrawRectangle(0, 0, renderCloud.getWidth(), renderCloud.getHeight());
+        }
+        
+        cloudShader.begin();
+        
+        cloudShader.setUniform2f("u_resolution",render_width, render_height);
+        cloudShader.setUniform1f("u_time", counterCloud);
+        cloudShader.setUniform1f("u_zoom", zoomCloud);
+        cloudShader.setUniform1f("u_balance", balance);
+        cloudShader.setUniform1f("u_contrast", contrast+1.0);
+        cloudShader.setUniform1i("bwSwitch", bwSwitch);
+        cloudShader.setUniform1i("bgTransparent", bgTransparent);
+        
+        
+        
+        ofSetColor(255,255,255);
+        ofFill();
+        ofDrawRectangle(0, 0, renderCloud.getWidth(), renderCloud.getHeight());
+        
+        cloudShader.end();
+        
+        renderCloud.end();
         
     }
     
@@ -630,6 +665,14 @@ void ofApp::draw(){
     ofSetColor(drawColor);
     ofDrawRectangle(0, 0, previewWidth, previewHeight);
     
+    ofTranslate(0, 10+previewHeight);
+    ofFill();
+    ofSetColor(255);
+    if( cloud ) renderCloud.draw(0, 0, previewWidth, previewHeight);
+    ofNoFill();
+    ofSetColor(drawColor);
+    ofDrawRectangle(0, 0, previewWidth, previewHeight);
+    
     ofPopMatrix();
     
     if( guiShow ){
@@ -650,6 +693,7 @@ void ofApp::draw(){
     syphonOutPerlin.publishTexture(&renderPerlin.getTexture());
     syphonOutSimplex.publishTexture(&renderSimplex.getTexture());
     syphonOutIkeda.publishTexture(&renderIkeda.getTexture());
+    syphonOutCloud.publishTexture(&renderCloud.getTexture());
 
     
 }
