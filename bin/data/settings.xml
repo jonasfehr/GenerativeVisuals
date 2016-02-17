@@ -1,21 +1,21 @@
 <parameters>
 	<Screen_Size>
-		<render_width>1024</render_width>
-		<render_height>1024</render_height>
+		<render_width>1337</render_width>
+		<render_height>1352</render_height>
 	</Screen_Size>
 	<Enable>
-		<linesHorizontal>0</linesHorizontal>
-		<linesVertical>0</linesVertical>
-		<arcFlag>0</arcFlag>
-		<voronoise>0</voronoise>
-		<perlin>0</perlin>
-		<simplex>0</simplex>
-		<ikeda>0</ikeda>
+		<linesHorizontal>1</linesHorizontal>
+		<linesVertical>1</linesVertical>
+		<arcFlag>1</arcFlag>
+		<voronoise>1</voronoise>
+		<perlin>1</perlin>
+		<simplex>1</simplex>
+		<ikeda>1</ikeda>
+		<cloud>1</cloud>
 		<BPM>120</BPM>
 		<BPW>4</BPW>
 		<bwSwitch>0</bwSwitch>
 		<bgTransparent>0</bgTransparent>
-	<cloud>1</cloud>
 	</Enable>
 	<paramLines>
 		<numOfLinesHorizontal>10</numOfLinesHorizontal>
@@ -41,7 +41,7 @@
 		<density>1</density>
 		<fRatio>0.5</fRatio>
 		<FirstDivision>1</FirstDivision>
-		<rotationSpeed>0.0612245</rotationSpeed>
+		<rotationSpeed>0.1</rotationSpeed>
 		<rotCenterX>0.5</rotCenterX>
 		<rotCenterY>0.5</rotCenterY>
 	</paramPerlin>
@@ -52,19 +52,14 @@
 	</paramSimplex>
 	<ikeda>
 		<tempoIkeda>0.1</tempoIkeda>
-		<amount>0.219388</amount>
-		<xGrid>10</xGrid>
-		<yGrid>10</yGrid>
-	<tempoCloud>0.642857</tempoCloud>
-	</ikeda>
-<parameters/>
-<cloud>
-		<tempoCloud>0.0153061</tempoCloud>
 		<amount>0.1</amount>
 		<xGrid>10</xGrid>
 		<yGrid>10</yGrid>
-		<zoomCloud>1</zoomCloud>
-		<balance>1</balance>
-	<contrast>1</contrast>
+	</ikeda>
+	<cloud>
+		<tempoCloud>0.1</tempoCloud>
+		<zoomCloud>0.1</zoomCloud>
+		<balance>0.5</balance>
+		<contrast>0</contrast>
 	</cloud>
 </parameters>

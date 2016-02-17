@@ -11,41 +11,40 @@ void ofApp::setup(){
     ofDisableArbTex();
     ofSetVerticalSync(true);
     ofSetCircleResolution(10);
+    
+    
+    int readWidth = 500;
+    int readHeight = 500;
+//    xml.load("settings.xml");
+//    xml.pushTag("parameters");
+//    xml.pushTag("Screen_Size");
+//    if(xml.tagExists("render_width")){
+//        
+//        readWidth = xml.getValue("render_width", 0);
+//        //cout<<render_width<<endl;
+//        
+//    }
+//    if(xml.tagExists("render_height")){
+//        readHeight= xml.getValue("render_height", 0);
+//    }
+//    
+//    xml.popTag();
+//    xml.popTag();
+    
+    
+    ofSetWindowShape(readWidth/10+230, (readWidth/10+10)*7+10);
+    
+    renderLines.allocate(readWidth, readHeight);
+    renderArcs.allocate(readWidth, readHeight);
+    renderVoronoise.allocate(readWidth, readHeight);
+    renderPerlin.allocate(readWidth, readHeight);
+    renderSimplex.allocate(readWidth, readHeight);
+    renderIkeda.allocate(readWidth, readHeight);
+    renderCloud.allocate(readWidth, readHeight);
 
     
-    /*
-    
-    // FBO renders
-    renderLines.allocate(render_widthIDTH, render_heightEIGHT);
-    renderArcs.allocate(render_widthIDTH, render_heightEIGHT);
-    renderVoronoise.allocate(render_widthIDTH, render_heightEIGHT);
-    renderPerlin.allocate(render_widthIDTH, render_heightEIGHT);
-    renderSimplex.allocate(render_widthIDTH, render_heightEIGHT);
-
     
     
-    
-    // Syphon
-    syphonOutLines.setName("Lines");
-    syphonOutArcs.setName("Arcs");
-    syphonOutVoronoise.setName("Voronoise");
-    syphonOutPerlin.setName("Perlin");
-    syphonOutSimplex.setName("Simplex");
-
-    
-    syphonLines.allocate(render_widthIDTH, render_heightEIGHT, GL_RGBA);
-    syphonArcs.allocate(render_widthIDTH, render_heightEIGHT, GL_RGBA);
-    syphonVoronoise.allocate(render_widthIDTH, render_heightEIGHT, GL_RGBA);
-    syphonPerlin.allocate(render_widthIDTH, render_heightEIGHT, GL_RGBA);
-    syphonSimplex.allocate(render_widthIDTH, render_heightEIGHT, GL_RGBA);
-    
-    
-    syphonLines = renderLines.getTextureReference();
-    syphonArcs = renderArcs.getTextureReference();
-    syphonVoronoise = renderVoronoise.getTextureReference();
-    syphonPerlin = renderPerlin.getTextureReference();
-    syphonSimplex = renderSimplex.getTextureReference();
-    */
     
     //VoronoiseRender
     voronoiseShader.load("shaders/voronoiseShader");
@@ -58,8 +57,8 @@ void ofApp::setup(){
     // setup Gui
     
     screenSize.setName("Screen Size");
-    screenSize.add(render_width.set("render_width",100,10,3000));
-    screenSize.add(render_height.set("render_height",100,10,3000));
+    screenSize.add(render_width.set("render_width",readWidth,10,3000));
+    screenSize.add(render_height.set("render_height",readHeight,10,3000));
     
     paramGeneral.setName("Enable");
     paramGeneral.add(linesHorizontal.set("linesHorizontal", true));
@@ -153,19 +152,15 @@ void ofApp::setup(){
 
     
     gui.setup(parameters);
+    sync.setup(2,gui.getParameter());
+    sync.load();
+    
+    
     guiShow = true;
     
-    //
-    gui.loadFromFile("settings.xml");
-
     
-    renderLines.allocate(render_width, render_height);
-    renderArcs.allocate(render_width, render_height);
-    renderVoronoise.allocate(render_width, render_height);
-    renderPerlin.allocate(render_width, render_height);
-    renderSimplex.allocate(render_width, render_height);
-    renderIkeda.allocate(render_width, render_height);
-    renderCloud.allocate(render_width, render_height);
+    
+   // gui.loadFromFile("settings.xml");
 
     
     // Syphon
@@ -179,13 +174,14 @@ void ofApp::setup(){
 
 
     
-    ofSetWindowShape(render_width/10+230, (render_height/10+10)*7+10);
     
+    
+  
     
     // OSC
    // oscReceiver.setup(OSCRECEIVEPORT);
    // oscSender.setup(OSCHOSTIP, OSCSENDPORT);
-    syncOSC.setup((ofParameterGroup&)gui.getParameter(),OSCRECEIVEPORT,OSCHOSTIP,OSCSENDPORT);
+    //syncOSC.setup((ofParameterGroup&)gui.getParameter(),OSCRECEIVEPORT,OSCHOSTIP,OSCSENDPORT);
 
     
     // Initialise the images
@@ -240,6 +236,8 @@ void ofApp::setup(){
     for(int i = 0; i<255; i++ ){
         keyIsDown[i] = false;
     }
+    
+    
 
 }
 
@@ -253,7 +251,7 @@ void ofApp::update(){
     // send & receive OSC
    // receiveOscParam();
    // sendOscParam();
-    syncOSC.update();
+   // syncOSC.update();
 
     
     if(numOfLinesHorizontal > numOfLinesHorizontalLast){
@@ -679,6 +677,8 @@ void ofApp::draw(){
         gui.draw();
     }
     
+    
+    
     ofSetColor(drawColor);
     string info = " - "+ofToString(ofGetFrameRate(), 0)+ " fps";
     ofSetWindowTitle("GenerativeVisuals"+ info);
@@ -696,11 +696,14 @@ void ofApp::draw(){
     syphonOutCloud.publishTexture(&renderCloud.getTexture());
 
     
+    sync.drawDebug();
+
+    
 }
 
 
 
-
+//--------------------------------------------------------------
 void ofApp::addNewArc(){
     
     randomArc _randomArc = *new randomArc();
@@ -710,11 +713,11 @@ void ofApp::addNewArc(){
     rndArc.push_back(_randomArc);
     
 }
-
+//--------------------------------------------------------------
 void ofApp::deleteArc(){
     rndArc.pop_back();
 }
-
+//--------------------------------------------------------------
 void ofApp::addNewHorizontalLine(){
     
     randomLine _randomLine = *new randomLine();
@@ -724,11 +727,11 @@ void ofApp::addNewHorizontalLine(){
     horizontalLines.push_back(_randomLine);
     
 }
-
+//--------------------------------------------------------------
 void ofApp::deleteHorizontalLine(){
     horizontalLines.pop_back();
 }
-
+//--------------------------------------------------------------
 void ofApp::addNewVerticalLine(){
     
     randomLine _randomLine = *new randomLine();
@@ -738,24 +741,23 @@ void ofApp::addNewVerticalLine(){
     verticalLines.push_back(_randomLine);
     
 }
-
+//--------------------------------------------------------------
 void ofApp::deleteVerticalLine(){
     verticalLines.pop_back();
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-//    if( key == 'h' ){
-//        guiShow = !guiShow;
-//    }
+    if( key == 'h' ){
+        guiShow = !guiShow;
+    }
     keyIsDown[key] = true;
     
     if(key == 's') {
         gui.saveToFile("settings.xml");
+        
     }
-    if(key == 'l') {
-        gui.loadFromFile("settings.xml");
-    }
+
     if(key == '-') {
         if(numOfArcs > 1) numOfArcs--;
     }
@@ -765,6 +767,10 @@ void ofApp::keyPressed(int key){
     if(key == 'x') {
         timer = 1;
     }
+    
+    
+
+    
     
     if(keyIsDown['h'] && key == OF_KEY_LEFT) {
         render_height--;
@@ -783,12 +789,27 @@ void ofApp::keyPressed(int key){
 //--------------------------------------------------------------
 void ofApp::exit(){
     gui.saveToFile("settings.xml");
+    //sync.save();
 }
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
     keyIsDown[key] = false;
     
+    switch(key) {
+        case ' ':
+            sync.learn();
+            break;
+        case 's':
+            sync.save();
+            break;
+        case 'l':
+            sync.load();
+            break;
+        case OF_KEY_BACKSPACE:
+            sync.unlearn();
+            break;
+    }
 }
 
 //--------------------------------------------------------------

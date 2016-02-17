@@ -2,14 +2,14 @@
 
 #include "ofMain.h"
 #include "ofxGui.h"
-#include "ofxOscParameterSync.h"
+//#include "ofxOscParameterSync.h"
 #include "ofxSyphon.h"
 #include "randomArc.h"
 #include "randomLine.h"
 #include "ofxAutoReloadedShader.h"
 #include "defines.h"
-
-
+#include "ofxParameterMidiSync.h"
+#include "ofxXmlSettings.h"
 
 class ofApp : public ofBaseApp{
     
@@ -37,8 +37,8 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
     
-    void receiveOscParam(ofParameterGroup params);
-    void sendOscParam(ofParameterGroup params);
+    //void receiveOscParam(ofParameterGroup params);
+    //void sendOscParam(ofParameterGroup params);
 
     
     //Shaders
@@ -51,7 +51,7 @@ public:
     // OSC
    // ofxOscReceiver oscReceiver;
    // ofxOscSender oscSender;
-    ofxOscParameterSync syncOSC;
+    //ofxOscParameterSync syncOSC;
         
     
     // Syphon
@@ -178,9 +178,6 @@ public:
     ofFbo renderIkeda;
     ofFbo renderCloud;
 
-
-
-    
     ofColor bgColor;
     ofColor drawColor;
     
@@ -192,6 +189,10 @@ public:
     int draggedX, draggedY, clickX, clickY;
     
     bool keyIsDown[255];
+    
+    ofxParameterMidiSync sync;
+    
+    ofxXmlSettings xml;
 
 
 };
