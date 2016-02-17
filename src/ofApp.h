@@ -8,8 +8,8 @@
 #include "randomLine.h"
 #include "ofxAutoReloadedShader.h"
 #include "defines.h"
-
-
+#include "ofxParameterMidiSync.h"
+#include "ofxMidiIn.h"
 
 class ofApp : public ofBaseApp{
     
@@ -40,6 +40,8 @@ public:
     void receiveOscParam(ofParameterGroup params);
     void sendOscParam(ofParameterGroup params);
 
+    ofxParameterMidiSync sync;
+    ofxMidiIn midiIn;
     
     //Shaders
     ofxAutoReloadedShader voronoiseShader;

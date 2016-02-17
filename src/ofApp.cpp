@@ -240,7 +240,8 @@ void ofApp::setup(){
     for(int i = 0; i<255; i++ ){
         keyIsDown[i] = false;
     }
-
+    int port = midiIn.getNumPorts()-1;
+    sync.setup(port, gui.getParameter());
 }
 
 //-------------------
@@ -677,6 +678,7 @@ void ofApp::draw(){
     
     if( guiShow ){
         gui.draw();
+        sync.drawDebug();
     }
     
     ofSetColor(drawColor);
@@ -752,10 +754,23 @@ void ofApp::keyPressed(int key){
     
     if(key == 's') {
         gui.saveToFile("settings.xml");
+        sync.save();
     }
     if(key == 'l') {
         gui.loadFromFile("settings.xml");
+        sync.load();
     }
+    
+    if(key == ' ') {
+        sync.learn();
+    }
+    if(key == 'u') {
+        sync.unlearn();
+    }
+    
+    
+    
+    
     if(key == '-') {
         if(numOfArcs > 1) numOfArcs--;
     }
