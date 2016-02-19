@@ -37,6 +37,8 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
     
+    void minMaxGui();
+    
     void receiveOscParam(ofParameterGroup params);
     void sendOscParam(ofParameterGroup params);
 
@@ -79,9 +81,10 @@ public:
     // Enable the different renderers
     ofParameterGroup paramEnable;
 
+    ofParameter<bool>  previews;
     ofParameter<bool>  linesHorizontal;
     ofParameter<bool>  linesVertical;
-    ofParameter<bool>  arcFlag;
+    ofParameter<bool>  arcs;
     ofParameter<bool>  voronoise;
     ofParameter<bool>  perlin;
     ofParameter<bool>  simplex;
@@ -150,6 +153,9 @@ public:
     ofParameter<float> zoomCloud;
     ofParameter<float> balance;
     ofParameter<float> contrast;
+    ofParameter<bool>  enableFBM;
+    ofParameter<bool>  enableRMF;
+    ofParameter<bool>  enableCircle;
 
     
     // tempo for noises
@@ -187,13 +193,22 @@ public:
     ofColor drawColor;
     
     float timer = 0;
-    
+    int port;
+    int numPorts;
     bool rndPoints[33];
     
     
     int draggedX, draggedY, clickX, clickY;
     
     bool keyIsDown[255];
+    
+    bool fCloud;
+    bool fIkeda;
+    bool fPerlin;
+    bool fVoronoise;
+    bool fArcs;
+    bool fLines;
+    bool fSimplex;
 
 
 };

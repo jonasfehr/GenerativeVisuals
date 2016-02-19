@@ -4,15 +4,19 @@
 
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
-    "999015EE524680C74335938659F70512196F22AD" : 0,
     "2DE9C8846D9375EAACFABA8963120E8E7719BAF5" : 0,
+    "999015EE524680C74335938659F70512196F22AD" : 0,
+    "90E2F969A762FB62C413A0C44D1F334E6EC3F531" : 0,
+    "A629249EFF60D73F9740C00A20C7E61D2E289861" : 0,
     "AED5DDA325DBD07D6863DA35F9993642D87DA21E" : 0,
     "F4CCB893AFADB97238A965FD2F28717F1CAAE613" : 0
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "ACA51276-DBED-43D6-9C02-DF72BBD4CB56",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
-    "999015EE524680C74335938659F70512196F22AD" : "..\/..\/addons\/ofxAutoReloadedShader",
     "2DE9C8846D9375EAACFABA8963120E8E7719BAF5" : "..\/..",
+    "999015EE524680C74335938659F70512196F22AD" : "..\/..\/addons\/ofxAutoReloadedShader",
+    "90E2F969A762FB62C413A0C44D1F334E6EC3F531" : "..\/..\/addons\/ofxMidi",
+    "A629249EFF60D73F9740C00A20C7E61D2E289861" : "..\/..\/addons\/ofxParameterMidiSync",
     "AED5DDA325DBD07D6863DA35F9993642D87DA21E" : "GenerativeVisuals\/",
     "F4CCB893AFADB97238A965FD2F28717F1CAAE613" : "..\/..\/addons\/ofxSyphon"
   },
@@ -26,9 +30,19 @@
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "2DE9C8846D9375EAACFABA8963120E8E7719BAF5"
     },
     {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/danomatika\/ofxMidi.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "90E2F969A762FB62C413A0C44D1F334E6EC3F531"
+    },
+    {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/andreasmuller\/ofxAutoReloadedShader.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "999015EE524680C74335938659F70512196F22AD"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/roymacdonald\/ofxParameterMidiSync.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "A629249EFF60D73F9740C00A20C7E61D2E289861"
     },
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/jonasfehr\/GenerativeVisuals.git",

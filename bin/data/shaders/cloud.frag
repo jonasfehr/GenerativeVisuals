@@ -12,6 +12,9 @@ uniform float u_balance;
 uniform float u_contrast;
 uniform bool bwSwitch;
 uniform bool bgTransparent;
+uniform bool enableFBM;
+uniform bool enableRMF;
+uniform bool enableCircle;
 
 // All noise and fbm from iq
 
@@ -134,12 +137,20 @@ float ridgedMultifractal(vec3 p)
 
 
 
-float cloud( vec3 p, float balance )
+float cloud( vec3 p, float balance, bool fbm, bool rmf)
 {
     float cloud = 0.0;
-    
-    cloud += balance*fbm( p * vec3(1.0, 0.2, 0.2))*0.5+0.5; p = p*2.01;
-    cloud += (1.0-balance)*ridgedMultifractal( p );
+    if(fbm && rmf){
+        cloud += balance*fbm( p * vec3(1.0, 0.2, 0.2))*0.5+0.5; p = p*2.01;
+        cloud += (1.0-balance)*ridgedMultifractal( p );
+    }
+    else if(fbm){
+        cloud += fbm( p * vec3(1.0, 0.2, 0.2))*0.5+0.5; p = p*2.01;
+    }
+    else if(rmf){
+        cloud += ridgedMultifractal( p );
+    }
+
     
     return cloud;
 }
@@ -152,14 +163,26 @@ void main( )
     uv.x*=(u_resolution.x/u_resolution.y);
     uv*=u_zoom*10.0;    
     float n = 0.0;
-    n = cloud(vec3(u_time, vec2(uv)), u_balance);
+    n = cloud(vec3(u_time, vec2(uv)), u_balance, enableFBM, enableRMF);
 
     n = ((n - 0.5) * max(u_contrast, 0.0)) + 0.5;
 
     float a = 1.0;
     if (bwSwitch) n = 1.0-n;
     if (bgTransparent) a = n;
+
+    vec2 st = gl_FragCoord.xy/u_resolution;
+
+    float v = 0.0;
+    if(enableCircle){
+        v = 1.-distance(st,vec2(0.5));
+        v = smoothstep(.5,.75,v);
+
     
-    gl_FragColor = vec4(vec3(n), a);
+        gl_FragColor = vec4(vec3(n*v), a*v);
+    }
+    else if(!enableCircle){
+        gl_FragColor = vec4(vec3(n), a);
+    }
 
 }

@@ -11,41 +11,41 @@ void ofApp::setup(){
     ofDisableArbTex();
     ofSetVerticalSync(true);
     ofSetCircleResolution(10);
-
+    
     
     /*
-    
-    // FBO renders
-    renderLines.allocate(render_widthIDTH, render_heightEIGHT);
-    renderArcs.allocate(render_widthIDTH, render_heightEIGHT);
-    renderVoronoise.allocate(render_widthIDTH, render_heightEIGHT);
-    renderPerlin.allocate(render_widthIDTH, render_heightEIGHT);
-    renderSimplex.allocate(render_widthIDTH, render_heightEIGHT);
-
-    
-    
-    
-    // Syphon
-    syphonOutLines.setName("Lines");
-    syphonOutArcs.setName("Arcs");
-    syphonOutVoronoise.setName("Voronoise");
-    syphonOutPerlin.setName("Perlin");
-    syphonOutSimplex.setName("Simplex");
-
-    
-    syphonLines.allocate(render_widthIDTH, render_heightEIGHT, GL_RGBA);
-    syphonArcs.allocate(render_widthIDTH, render_heightEIGHT, GL_RGBA);
-    syphonVoronoise.allocate(render_widthIDTH, render_heightEIGHT, GL_RGBA);
-    syphonPerlin.allocate(render_widthIDTH, render_heightEIGHT, GL_RGBA);
-    syphonSimplex.allocate(render_widthIDTH, render_heightEIGHT, GL_RGBA);
-    
-    
-    syphonLines = renderLines.getTextureReference();
-    syphonArcs = renderArcs.getTextureReference();
-    syphonVoronoise = renderVoronoise.getTextureReference();
-    syphonPerlin = renderPerlin.getTextureReference();
-    syphonSimplex = renderSimplex.getTextureReference();
-    */
+     
+     // FBO renders
+     renderLines.allocate(render_widthIDTH, render_heightEIGHT);
+     renderArcs.allocate(render_widthIDTH, render_heightEIGHT);
+     renderVoronoise.allocate(render_widthIDTH, render_heightEIGHT);
+     renderPerlin.allocate(render_widthIDTH, render_heightEIGHT);
+     renderSimplex.allocate(render_widthIDTH, render_heightEIGHT);
+     
+     
+     
+     
+     // Syphon
+     syphonOutLines.setName("Lines");
+     syphonOutArcs.setName("Arcs");
+     syphonOutVoronoise.setName("Voronoise");
+     syphonOutPerlin.setName("Perlin");
+     syphonOutSimplex.setName("Simplex");
+     
+     
+     syphonLines.allocate(render_widthIDTH, render_heightEIGHT, GL_RGBA);
+     syphonArcs.allocate(render_widthIDTH, render_heightEIGHT, GL_RGBA);
+     syphonVoronoise.allocate(render_widthIDTH, render_heightEIGHT, GL_RGBA);
+     syphonPerlin.allocate(render_widthIDTH, render_heightEIGHT, GL_RGBA);
+     syphonSimplex.allocate(render_widthIDTH, render_heightEIGHT, GL_RGBA);
+     
+     
+     syphonLines = renderLines.getTextureReference();
+     syphonArcs = renderArcs.getTextureReference();
+     syphonVoronoise = renderVoronoise.getTextureReference();
+     syphonPerlin = renderPerlin.getTextureReference();
+     syphonSimplex = renderSimplex.getTextureReference();
+     */
     
     //VoronoiseRender
     voronoiseShader.load("shaders/voronoiseShader");
@@ -53,7 +53,7 @@ void ofApp::setup(){
     simplexShader.load("shaders/simplexShader");
     ikedaShader.load("shaders/ikeda");
     cloudShader.load("shaders/cloud");
-
+    
     
     // setup Gui
     
@@ -62,9 +62,10 @@ void ofApp::setup(){
     screenSize.add(render_height.set("render_height",100,10,3000));
     
     paramGeneral.setName("Enable");
+    paramGeneral.add(previews.set("previews", true));
     paramGeneral.add(linesHorizontal.set("linesHorizontal", true));
     paramGeneral.add(linesVertical.set("linesVertical", true));
-    paramGeneral.add(arcFlag.set("arcFlag", true));
+    paramGeneral.add(arcs.set("arcs", true));
     paramGeneral.add(voronoise.set("voronoise", true));
     paramGeneral.add(perlin.set("perlin", true));
     paramGeneral.add(simplex.set("simplex", true));
@@ -101,21 +102,21 @@ void ofApp::setup(){
     paramVoronoise.add(multiply_by_F1.set("multiply_by_F1", false));
     paramVoronoise.add(multiply_by_F2.set("multiply_by_F2", false));
     paramVoronoise.add(inverse.set("inverse", false));
-
+    
     
     
     // param for perlinShader
     paramPerlin.setName("paramPerlin");
- //   paramPerlin.add(tempoPerlin.set("tempoPerlin", 0.1, 0., 1));
+    //   paramPerlin.add(tempoPerlin.set("tempoPerlin", 0.1, 0., 1));
     paramPerlin.add(density.set("density", 1, 0.3, 10));
-
+    
     paramPerlin.add(fRatio.set("fRatio", 0.5, 0.1, 0.9));
     paramPerlin.add(FirstDivision.set("FirstDivision", 1, 1., 10));
     paramPerlin.add(rotationSpeed.set("rotationSpeed", 0.1, -1., 1));
     paramPerlin.add(rotCenterX.set("rotCenterX", 0.5, 0., 1.));
     paramPerlin.add(rotCenterY.set("rotCenterY", 0.5, 0., 1));
-
-
+    
+    
     
     // param for simplexShader
     paramSimplex.setName("paramSimplex");
@@ -124,20 +125,23 @@ void ofApp::setup(){
     paramSimplex.add(zoom.set("zoom", 0.1, 0., 1));
     
     // param for Ikeda
-    paramIkeda.setName("ikeda");
+    paramIkeda.setName("paramIkeda");
     paramIkeda.add(tempoIkeda.set("tempoIkeda", 0.1, 0., 1));
     paramIkeda.add(amount.set("amount", 0.1, 0., 1));
     paramIkeda.add(xGrid.set("xGrid",10,10,200));
     paramIkeda.add(yGrid.set("yGrid",10,10,200));
     
     // param for Cloud
-    paramCloud.setName("cloud");
+    paramCloud.setName("paramCloud");
     paramCloud.add(tempoCloud.set("tempoCloud", 0.1, 0., 1));
     paramCloud.add(zoomCloud.set("zoomCloud", 0.1, 0., 1));
     paramCloud.add(balance.set("balance",0.5,0.,1.));
     paramCloud.add(contrast.set("contrast",0.,-1,1.));
-
-
+    paramCloud.add(enableFBM.set("enableFBM", true));
+    paramCloud.add(enableRMF.set("enableRMF", true));
+    paramCloud.add(enableCircle.set("border", true));
+    
+    
     // setGui
     parameters.setName("parameters");
     parameters.add(screenSize);
@@ -149,15 +153,19 @@ void ofApp::setup(){
     parameters.add(paramSimplex);
     parameters.add(paramIkeda);
     parameters.add(paramCloud);
-
-
+    
+    
+    
     
     gui.setup(parameters);
     guiShow = true;
     
+    gui.minimizeAll();
+    
+    
     //
     gui.loadFromFile("settings.xml");
-
+    
     
     renderLines.allocate(render_width, render_height);
     renderArcs.allocate(render_width, render_height);
@@ -166,7 +174,7 @@ void ofApp::setup(){
     renderSimplex.allocate(render_width, render_height);
     renderIkeda.allocate(render_width, render_height);
     renderCloud.allocate(render_width, render_height);
-
+    
     
     // Syphon
     syphonOutLines.setName("Lines");
@@ -176,17 +184,17 @@ void ofApp::setup(){
     syphonOutSimplex.setName("Simplex");
     syphonOutIkeda.setName("Ikeda");
     syphonOutCloud.setName("Cloud");
-
-
     
-    ofSetWindowShape(render_width/10+230, (render_height/10+10)*7+10);
+    
+    
+    ofSetWindowShape(render_width/10+230, (render_height/10+10)*7+10+65);
     
     
     // OSC
-   // oscReceiver.setup(OSCRECEIVEPORT);
-   // oscSender.setup(OSCHOSTIP, OSCSENDPORT);
+    // oscReceiver.setup(OSCRECEIVEPORT);
+    // oscSender.setup(OSCHOSTIP, OSCSENDPORT);
     syncOSC.setup((ofParameterGroup&)gui.getParameter(),OSCRECEIVEPORT,OSCHOSTIP,OSCSENDPORT);
-
+    
     
     // Initialise the images
     numOfLinesHorizontalLast = 0;
@@ -236,12 +244,32 @@ void ofApp::setup(){
     counterIkeda = 0;
     counterCloud = 0;
     
+    fCloud = cloud;
+    fIkeda = ikeda;
+    fPerlin = perlin;
+    fSimplex = simplex;
+    fVoronoise = voronoise;
+    fArcs = arcs;
+    fLines = linesVertical||linesHorizontal;
+    
+    ofxGuiGroup * group = dynamic_cast <ofxGuiGroup *>( gui.getControl("Enable"));
+    if(group){
+        group->maximize();
+    }
+    
+    
     
     for(int i = 0; i<255; i++ ){
         keyIsDown[i] = false;
     }
-    int port = midiIn.getNumPorts()-1;
+    port = midiIn.getNumPorts()-1;
+    numPorts =midiIn.getNumPorts();
     sync.setup(port, gui.getParameter());
+    
+    
+    
+    
+    
 }
 
 //-------------------
@@ -251,11 +279,13 @@ void ofApp::setup(){
 //-------------------------------------------
 void ofApp::update(){
     
+    minMaxGui();
+    
     // send & receive OSC
-   // receiveOscParam();
-   // sendOscParam();
+    // receiveOscParam();
+    // sendOscParam();
     syncOSC.update();
-
+    
     
     if(numOfLinesHorizontal > numOfLinesHorizontalLast){
         for (int n = 1; n<numOfLinesHorizontal-numOfLinesHorizontalLast; n++){
@@ -312,9 +342,9 @@ void ofApp::update(){
             deleteArc();
             numOfArcsLast--;
         }
-
+        
     }
-
+    
     
     // Updates per BPM
     
@@ -354,7 +384,7 @@ void ofApp::update(){
     
     
     
-    if(arcFlag){
+    if(arcs){
         for(int i = 0; i<rndArc.size(); i++){
             rndArc[i].update(timer);
             //   rndArc[i].bpm = BPM;
@@ -366,15 +396,15 @@ void ofApp::update(){
     // Counter for noises
     
     counterVoronoise += tempoVoronoise;
- //   counterPerlin   += tempoPerlin/2;
+    //   counterPerlin   += tempoPerlin/2;
     counterSimplex += tempoSimplex/10;
     
     counterPerlinRot += rotationSpeed/100;
     
     counterIkeda += tempoIkeda/10;
     counterCloud += tempoCloud/10;
-
-
+    
+    
 }
 
 //--------------------------------------------------------------
@@ -415,7 +445,7 @@ void ofApp::draw(){
         renderLines.end();
     }
     
-    if(arcFlag){
+    if(arcs){
         renderArcs.begin();
         glClearColor(0.0, 0.0, 0.0, 0.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -434,36 +464,36 @@ void ofApp::draw(){
     if(voronoise){
         
         renderVoronoise.begin();
-            glClearColor(0.0, 0.0, 0.0, 0.0);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            
-            if(!bgTransparent){// ofBackground(bgColor);
-                
-                ofSetColor(bgColor);
-                ofFill();
-                ofDrawRectangle(0, 0, renderPerlin.getWidth(), renderPerlin.getHeight());
-            }
+        glClearColor(0.0, 0.0, 0.0, 0.0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
-            voronoiseShader.begin();
+        if(!bgTransparent){// ofBackground(bgColor);
             
-                voronoiseShader.setUniform3f("iResolution", render_width, render_height, 0.0);
-                voronoiseShader.setUniform1f("time", counterVoronoise);
-                voronoiseShader.setUniform1f("SCALE", scaleVoronoise);
-                voronoiseShader.setUniform1i("OCTAVES", octavesVoronoise);
-                voronoiseShader.setUniform1f("function", function);
-                voronoiseShader.setUniform1i("multiply_by_F1", multiply_by_F1);
-                voronoiseShader.setUniform1i("multiply_by_F2", multiply_by_F2);
-                voronoiseShader.setUniform1i("inverse", inverse);
-                voronoiseShader.setUniform1f("distance_type", distance_type);
-                voronoiseShader.setUniform1i("bwSwitch", bwSwitch);
-                voronoiseShader.setUniform1i("bgTransparent", bgTransparent);
+            ofSetColor(bgColor);
+            ofFill();
+            ofDrawRectangle(0, 0, renderPerlin.getWidth(), renderPerlin.getHeight());
+        }
         
-                
-                ofSetColor(255,255,255);
-                ofFill();
-                ofDrawRectangle(0, 0, renderVoronoise.getWidth(), renderVoronoise.getHeight());
-            
-            voronoiseShader.end();
+        voronoiseShader.begin();
+        
+        voronoiseShader.setUniform3f("iResolution", render_width, render_height, 0.0);
+        voronoiseShader.setUniform1f("time", counterVoronoise);
+        voronoiseShader.setUniform1f("SCALE", scaleVoronoise);
+        voronoiseShader.setUniform1i("OCTAVES", octavesVoronoise);
+        voronoiseShader.setUniform1f("function", function);
+        voronoiseShader.setUniform1i("multiply_by_F1", multiply_by_F1);
+        voronoiseShader.setUniform1i("multiply_by_F2", multiply_by_F2);
+        voronoiseShader.setUniform1i("inverse", inverse);
+        voronoiseShader.setUniform1f("distance_type", distance_type);
+        voronoiseShader.setUniform1i("bwSwitch", bwSwitch);
+        voronoiseShader.setUniform1i("bgTransparent", bgTransparent);
+        
+        
+        ofSetColor(255,255,255);
+        ofFill();
+        ofDrawRectangle(0, 0, renderVoronoise.getWidth(), renderVoronoise.getHeight());
+        
+        voronoiseShader.end();
         
         renderVoronoise.end();
         
@@ -472,35 +502,35 @@ void ofApp::draw(){
     if(perlin){
         
         renderPerlin.begin();
-            glClearColor(0.0, 0.0, 0.0, 0.0);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClearColor(0.0, 0.0, 0.0, 0.0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
-            if(!bgTransparent){// ofBackground(bgColor);
-                
+        if(!bgTransparent){// ofBackground(bgColor);
+            
             ofSetColor(bgColor);
             ofFill();
             ofDrawRectangle(0, 0, renderPerlin.getWidth(), renderPerlin.getHeight());
-            }
+        }
         
-            perlinShader.begin();
-            
-                perlinShader.setUniform3f("iResolution", render_width, render_height, 0.0);
-                perlinShader.setUniform1f("time", counterPerlin);
-                perlinShader.setUniform1f("density", density);
-
-                perlinShader.setUniform1f("fRatio", fRatio);
-                perlinShader.setUniform1f("FirstDivision", FirstDivision);
-                perlinShader.setUniform1f("theta", counterPerlinRot);
-                perlinShader.setUniform2f("rotCenter", rotCenterX, rotCenterY);
-                perlinShader.setUniform1i("bwSwitch", bwSwitch);
-                perlinShader.setUniform1i("bgTransparent", bgTransparent);
-                
-                
-                ofSetColor(255,255,255);
-                ofFill();
-                ofDrawRectangle(0, 0, renderPerlin.getWidth(), renderPerlin.getHeight());
-            
-            perlinShader.end();
+        perlinShader.begin();
+        
+        perlinShader.setUniform3f("iResolution", render_width, render_height, 0.0);
+        perlinShader.setUniform1f("time", counterPerlin);
+        perlinShader.setUniform1f("density", density);
+        
+        perlinShader.setUniform1f("fRatio", fRatio);
+        perlinShader.setUniform1f("FirstDivision", FirstDivision);
+        perlinShader.setUniform1f("theta", counterPerlinRot);
+        perlinShader.setUniform2f("rotCenter", rotCenterX, rotCenterY);
+        perlinShader.setUniform1i("bwSwitch", bwSwitch);
+        perlinShader.setUniform1i("bgTransparent", bgTransparent);
+        
+        
+        ofSetColor(255,255,255);
+        ofFill();
+        ofDrawRectangle(0, 0, renderPerlin.getWidth(), renderPerlin.getHeight());
+        
+        perlinShader.end();
         
         renderPerlin.end();
         
@@ -596,6 +626,9 @@ void ofApp::draw(){
         cloudShader.setUniform1f("u_contrast", contrast+1.0);
         cloudShader.setUniform1i("bwSwitch", bwSwitch);
         cloudShader.setUniform1i("bgTransparent", bgTransparent);
+        cloudShader.setUniform1i("enableFBM", enableFBM);
+        cloudShader.setUniform1i("enableRMF", enableRMF);
+        cloudShader.setUniform1i("enableCircle", enableCircle);
         
         
         
@@ -612,69 +645,71 @@ void ofApp::draw(){
     ofBackground(bgColor);
     if(bgTransparent) ofBackground(100);
     
-    ofPushMatrix();
-    
-    ofSetColor(255);
-    int previewWidth = render_width/10;
-    int previewHeight = render_height/10;
-    
-    ofTranslate(220, 10);
-    ofFill();
-    ofSetColor(255);
-    if(linesHorizontal || linesVertical) renderLines.draw(0, 0, previewWidth, previewHeight);
-    ofNoFill();
-    ofSetColor(drawColor);
-    ofDrawRectangle(0, 0, previewWidth, previewHeight);
-    
-    ofTranslate(0, 10+previewHeight);
-    ofFill();
-    ofSetColor(255);
-    if( arcFlag ) renderArcs.draw(0, 0, previewWidth, previewHeight);
-    ofNoFill();
-    ofSetColor(drawColor);
-    ofDrawRectangle(0, 0, previewWidth, previewHeight);
-    
-    ofTranslate(0, 10+previewHeight);
-    ofFill();
-    ofSetColor(255);
-    if( voronoise ) renderVoronoise.draw(0, 0, previewWidth, previewHeight);
-    ofNoFill();
-    ofSetColor(drawColor);
-    ofDrawRectangle(0, 0, previewWidth, previewHeight);
-    
-    ofTranslate(0, 10+previewHeight);
-    ofFill();
-    ofSetColor(255);
-    if( perlin ) renderPerlin.draw(0, 0, previewWidth, previewHeight);
-    ofNoFill();
-    ofSetColor(drawColor);
-    ofDrawRectangle(0, 0, previewWidth, previewHeight);
-    
-    ofTranslate(0, 10+previewHeight);
-    ofFill();
-    ofSetColor(255);
-    if( simplex ) renderSimplex.draw(0, 0, previewWidth, previewHeight);
-    ofNoFill();
-    ofSetColor(drawColor);
-    ofDrawRectangle(0, 0, previewWidth, previewHeight);
-    
-    ofTranslate(0, 10+previewHeight);
-    ofFill();
-    ofSetColor(255);
-    if( ikeda ) renderIkeda.draw(0, 0, previewWidth, previewHeight);
-    ofNoFill();
-    ofSetColor(drawColor);
-    ofDrawRectangle(0, 0, previewWidth, previewHeight);
-    
-    ofTranslate(0, 10+previewHeight);
-    ofFill();
-    ofSetColor(255);
-    if( cloud ) renderCloud.draw(0, 0, previewWidth, previewHeight);
-    ofNoFill();
-    ofSetColor(drawColor);
-    ofDrawRectangle(0, 0, previewWidth, previewHeight);
-    
-    ofPopMatrix();
+    if(previews){
+        ofPushMatrix();
+        
+        ofSetColor(255);
+        int previewWidth = render_width/10;
+        int previewHeight = render_height/10;
+        
+        ofTranslate(220, 10);
+        ofFill();
+        ofSetColor(255);
+        if(linesHorizontal || linesVertical) renderLines.draw(0, 0, previewWidth, previewHeight);
+        ofNoFill();
+        ofSetColor(drawColor);
+        ofDrawRectangle(0, 0, previewWidth, previewHeight);
+        
+        ofTranslate(0, 10+previewHeight);
+        ofFill();
+        ofSetColor(255);
+        if( arcs ) renderArcs.draw(0, 0, previewWidth, previewHeight);
+        ofNoFill();
+        ofSetColor(drawColor);
+        ofDrawRectangle(0, 0, previewWidth, previewHeight);
+        
+        ofTranslate(0, 10+previewHeight);
+        ofFill();
+        ofSetColor(255);
+        if( voronoise ) renderVoronoise.draw(0, 0, previewWidth, previewHeight);
+        ofNoFill();
+        ofSetColor(drawColor);
+        ofDrawRectangle(0, 0, previewWidth, previewHeight);
+        
+        ofTranslate(0, 10+previewHeight);
+        ofFill();
+        ofSetColor(255);
+        if( perlin ) renderPerlin.draw(0, 0, previewWidth, previewHeight);
+        ofNoFill();
+        ofSetColor(drawColor);
+        ofDrawRectangle(0, 0, previewWidth, previewHeight);
+        
+        ofTranslate(0, 10+previewHeight);
+        ofFill();
+        ofSetColor(255);
+        if( simplex ) renderSimplex.draw(0, 0, previewWidth, previewHeight);
+        ofNoFill();
+        ofSetColor(drawColor);
+        ofDrawRectangle(0, 0, previewWidth, previewHeight);
+        
+        ofTranslate(0, 10+previewHeight);
+        ofFill();
+        ofSetColor(255);
+        if( ikeda ) renderIkeda.draw(0, 0, previewWidth, previewHeight);
+        ofNoFill();
+        ofSetColor(drawColor);
+        ofDrawRectangle(0, 0, previewWidth, previewHeight);
+        
+        ofTranslate(0, 10+previewHeight);
+        ofFill();
+        ofSetColor(255);
+        if( cloud ) renderCloud.draw(0, 0, previewWidth, previewHeight);
+        ofNoFill();
+        ofSetColor(drawColor);
+        ofDrawRectangle(0, 0, previewWidth, previewHeight);
+        
+        ofPopMatrix();
+    }
     
     if( guiShow ){
         gui.draw();
@@ -685,6 +720,7 @@ void ofApp::draw(){
     string info = " - "+ofToString(ofGetFrameRate(), 0)+ " fps";
     ofSetWindowTitle("GenerativeVisuals"+ info);
     
+
     
     
     // Output Syphon
@@ -696,7 +732,7 @@ void ofApp::draw(){
     syphonOutSimplex.publishTexture(&renderSimplex.getTexture());
     syphonOutIkeda.publishTexture(&renderIkeda.getTexture());
     syphonOutCloud.publishTexture(&renderCloud.getTexture());
-
+    
     
 }
 
@@ -747,9 +783,9 @@ void ofApp::deleteVerticalLine(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-//    if( key == 'h' ){
-//        guiShow = !guiShow;
-//    }
+    //    if( key == 'h' ){
+    //        guiShow = !guiShow;
+    //    }
     keyIsDown[key] = true;
     
     if(key == 's') {
@@ -767,8 +803,13 @@ void ofApp::keyPressed(int key){
     if(key == 'u') {
         sync.unlearn();
     }
-    
-    
+    if(key=='m'){
+        port ++;
+        port=port%numPorts;
+        sync.reset();
+        cout<<"listening to midi Port "+ofToString(port)<<endl;
+        sync.setup(port, gui.getParameter());
+    }
     
     
     if(key == '-') {
@@ -847,3 +888,122 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
     
 }
 //--------------------------------------------------------------
+void ofApp::minMaxGui(){
+    if((linesHorizontal||linesVertical) && fLines){
+        
+        ofxGuiGroup * group = dynamic_cast <ofxGuiGroup *>( gui.getControl("paramLines"));
+        if(group){
+            group->maximize();
+        }
+        fLines=false;
+    }
+    if(!(linesHorizontal||linesVertical) && !fLines){
+        ofxGuiGroup * group = dynamic_cast <ofxGuiGroup *>( gui.getControl("paramLines"));
+        if(group){
+            group->minimize();
+        }
+        fLines=true;
+    }
+    
+    
+    if(arcs && fArcs){
+        
+        ofxGuiGroup * group = dynamic_cast <ofxGuiGroup *>( gui.getControl("paramArcs"));
+        if(group){
+            group->maximize();
+        }
+        fArcs=false;
+    }
+    if(!arcs && !fArcs){
+        ofxGuiGroup * group = dynamic_cast <ofxGuiGroup *>( gui.getControl("paramArcs"));
+        if(group){
+            group->minimize();
+        }
+        fArcs=true;
+    }
+    
+    
+    if(voronoise && fVoronoise){
+        
+        ofxGuiGroup * group = dynamic_cast <ofxGuiGroup *>( gui.getControl("paramVoronoise"));
+        if(group){
+            group->maximize();
+        }
+        fVoronoise=false;
+    }
+    if(!voronoise && !fVoronoise){
+        ofxGuiGroup * group = dynamic_cast <ofxGuiGroup *>( gui.getControl("paramVoronoise"));
+        if(group){
+            group->minimize();
+        }
+        fVoronoise=true;
+    }
+    
+    
+    if(perlin && fPerlin){
+        
+        ofxGuiGroup * group = dynamic_cast <ofxGuiGroup *>( gui.getControl("paramPerlin"));
+        if(group){
+            group->maximize();
+        }
+        fPerlin=false;
+    }
+    if(!perlin && !fPerlin){
+        ofxGuiGroup * group = dynamic_cast <ofxGuiGroup *>( gui.getControl("paramPerlin"));
+        if(group){
+            group->minimize();
+        }
+        fPerlin=true;
+    }
+    
+    
+    if(simplex && fSimplex){
+        
+        ofxGuiGroup * group = dynamic_cast <ofxGuiGroup *>( gui.getControl("paramSimplex"));
+        if(group){
+            group->maximize();
+        }
+        fSimplex=false;
+    }
+    if(!simplex && !fSimplex){
+        ofxGuiGroup * group = dynamic_cast <ofxGuiGroup *>( gui.getControl("paramSimplex"));
+        if(group){
+            group->minimize();
+        }
+        fSimplex=true;
+    }
+    
+    
+    if(ikeda && fIkeda){
+        
+        ofxGuiGroup * group = dynamic_cast <ofxGuiGroup *>( gui.getControl("paramIkeda"));
+        if(group){
+            group->maximize();
+        }
+        fIkeda=false;
+    }
+    if(!ikeda && !fIkeda){
+        ofxGuiGroup * group = dynamic_cast <ofxGuiGroup *>( gui.getControl("paramIkeda"));
+        if(group){
+            group->minimize();
+        }
+        fIkeda=true;
+    }
+    
+    
+    if(cloud && fCloud){
+        
+        ofxGuiGroup * group = dynamic_cast <ofxGuiGroup *>( gui.getControl("paramCloud"));
+        if(group){
+            group->maximize();
+        }
+        fCloud=false;
+    }
+    if(!cloud && !fCloud){
+        ofxGuiGroup * group = dynamic_cast <ofxGuiGroup *>( gui.getControl("paramCloud"));
+        if(group){
+            group->minimize();
+        }
+        fCloud=true;
+    }
+}

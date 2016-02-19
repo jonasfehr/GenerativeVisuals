@@ -1,70 +1,70 @@
 <parameters>
 	<Screen_Size>
-		<render_width>2054</render_width>
-		<render_height>2054</render_height>
+		<render_width>1080</render_width>
+		<render_height>1080</render_height>
 	</Screen_Size>
 	<Enable>
-		<linesHorizontal>1</linesHorizontal>
-		<linesVertical>1</linesVertical>
-		<arcFlag>0</arcFlag>
-		<voronoise>0</voronoise>
+		<linesHorizontal>0</linesHorizontal>
+		<linesVertical>0</linesVertical>
+		<arcs>0</arcs>
+		<voronoise>1</voronoise>
 		<perlin>0</perlin>
 		<simplex>0</simplex>
-		<ikeda>1</ikeda>
-		<BPM>180</BPM>
-		<BPW>11</BPW>
+		<ikeda>0</ikeda>
+		<cloud>1</cloud>
+		<BPM>147.908</BPM>
+		<BPW>7</BPW>
 		<bwSwitch>0</bwSwitch>
 		<bgTransparent>1</bgTransparent>
-	<cloud>0</cloud>
+	<previews>0</previews>
 	</Enable>
 	<paramLines>
-		<numOfLinesHorizontal>3.18898</numOfLinesHorizontal>
-		<numOfLinesVertical>1</numOfLinesVertical>
-		<linesMaxWidth>56.8189</linesMaxWidth>
+		<numOfLinesHorizontal>1</numOfLinesHorizontal>
+		<numOfLinesVertical>111.543</numOfLinesVertical>
+		<linesMaxWidth>3.12755</linesMaxWidth>
 	</paramLines>
 	<paramArcs>
-		<numOfArcs>10</numOfArcs>
-		<heightAdjust>0.929134</heightAdjust>
+		<numOfArcs>11</numOfArcs>
+		<heightAdjust>0.5</heightAdjust>
 		<width_height>1</width_height>
 	</paramArcs>
 	<paramVoronoise>
-		<tempoVoronoise>0.5</tempoVoronoise>
-		<scaleVoronoise>10</scaleVoronoise>
-		<octavesVoronoise>8</octavesVoronoise>
-		<function>1</function>
+		<tempoVoronoise>0.0918367</tempoVoronoise>
+		<scaleVoronoise>14.898</scaleVoronoise>
+		<octavesVoronoise>3</octavesVoronoise>
+		<function>0</function>
 		<distance_type>1</distance_type>
-		<multiply_by_F1>0</multiply_by_F1>
-		<multiply_by_F2>0</multiply_by_F2>
+		<multiply_by_F1>1</multiply_by_F1>
+		<multiply_by_F2>1</multiply_by_F2>
 		<inverse>0</inverse>
 	</paramVoronoise>
 	<paramPerlin>
-		<density>1</density>
-		<fRatio>0.5</fRatio>
-		<FirstDivision>1</FirstDivision>
-		<rotationSpeed>0.0612245</rotationSpeed>
+		<density>8.21837</density>
+		<fRatio>0.495918</fRatio>
+		<FirstDivision>8.71429</FirstDivision>
+		<rotationSpeed>0.0102041</rotationSpeed>
 		<rotCenterX>0.5</rotCenterX>
 		<rotCenterY>0.5</rotCenterY>
 	</paramPerlin>
 	<paramSimplex>
-		<tempoSimplex>0.1</tempoSimplex>
-		<in1>1</in1>
-		<zoom>0.1</zoom>
+		<tempoSimplex>0</tempoSimplex>
+		<in1>229.592</in1>
+		<zoom>0.425197</zoom>
 	</paramSimplex>
-	<ikeda>
-		<tempoIkeda>1</tempoIkeda>
-		<amount>0.748031</amount>
-		<xGrid>10</xGrid>
-		<yGrid>10</yGrid>
-	<tempoCloud>0.642857</tempoCloud>
-	</ikeda>
+	<paramIkeda>
+		<tempoIkeda>0.0306122</tempoIkeda>
+		<amount>0</amount>
+		<xGrid>69.1327</xGrid>
+		<yGrid>74.949</yGrid>
+	</paramIkeda>
+	<paramCloud>
+		<tempoCloud>0.0459184</tempoCloud>
+		<zoomCloud>0</zoomCloud>
+		<balance>0.714286</balance>
+		<contrast>1</contrast>
+	<enableFBM>1</enableFBM>
+		<enableRMF>0</enableRMF>
+		<border>1</border>
+	</paramCloud>
 <parameters/>
-<cloud>
-		<tempoCloud>0.494898</tempoCloud>
-		<amount>0.1</amount>
-		<xGrid>10</xGrid>
-		<yGrid>10</yGrid>
-		<zoomCloud>0.306122</zoomCloud>
-		<balance>0.571429</balance>
-	<contrast>0.316326</contrast>
-	</cloud>
 </parameters>
