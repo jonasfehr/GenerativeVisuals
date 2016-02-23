@@ -1,0 +1,26 @@
+<ofxParameterMidiSync>
+	<ofParameterMidiInfo>
+		<groupHierarchyNames>parameters/paramLines/numOfLinesHorizontal</groupHierarchyNames>
+		<dims>1</dims>
+		<controlNum>16</controlNum>
+		<bIsColor>0</bIsColor>
+		<bIsVec>0</bIsVec>
+		<multiDimType>0</multiDimType>
+	</ofParameterMidiInfo>
+	<ofParameterMidiInfo>
+		<groupHierarchyNames>parameters/paramLines/numOfLinesVertical</groupHierarchyNames>
+		<dims>1</dims>
+		<controlNum>17</controlNum>
+		<bIsColor>0</bIsColor>
+		<bIsVec>0</bIsVec>
+		<multiDimType>0</multiDimType>
+	</ofParameterMidiInfo>
+	<ofParameterMidiInfo>
+		<groupHierarchyNames>parameters/paramLines/linesMaxWidth</groupHierarchyNames>
+		<dims>1</dims>
+		<controlNum>18</controlNum>
+		<bIsColor>0</bIsColor>
+		<bIsVec>0</bIsVec>
+		<multiDimType>0</multiDimType>
+	</ofParameterMidiInfo>
+</ofxParameterMidiSync>

@@ -4,24 +4,24 @@
 		<render_height>1080</render_height>
 	</Screen_Size>
 	<Enable>
-		<linesHorizontal>0</linesHorizontal>
-		<linesVertical>0</linesVertical>
+		<linesHorizontal>1</linesHorizontal>
+		<linesVertical>1</linesVertical>
 		<arcs>0</arcs>
-		<voronoise>1</voronoise>
+		<voronoise>0</voronoise>
 		<perlin>0</perlin>
 		<simplex>0</simplex>
 		<ikeda>0</ikeda>
 		<cloud>1</cloud>
-		<BPM>147.908</BPM>
-		<BPW>7</BPW>
+		<BPM>81.1225</BPM>
+		<BPW>4</BPW>
 		<bwSwitch>0</bwSwitch>
 		<bgTransparent>1</bgTransparent>
 	<previews>0</previews>
 	</Enable>
 	<paramLines>
-		<numOfLinesHorizontal>1</numOfLinesHorizontal>
-		<numOfLinesVertical>111.543</numOfLinesVertical>
-		<linesMaxWidth>3.12755</linesMaxWidth>
+		<numOfLinesHorizontal>1.00981</numOfLinesHorizontal>
+		<numOfLinesVertical>2.1043</numOfLinesVertical>
+		<linesMaxWidth>9.76571</linesMaxWidth>
 	</paramLines>
 	<paramArcs>
 		<numOfArcs>11</numOfArcs>
